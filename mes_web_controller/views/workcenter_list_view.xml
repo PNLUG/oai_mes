@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="workcenter_list">
+        <t t-call="web.html_container">
+            <div class="container">
+                <form action="/mobile_mrp_working/open_wos/" method="POST">
+                    <input name="csrf_token" type="hidden" t-att-value="request.csrf_token()"/>
+                    <div class="row justify-content-center my-3">
+                        <h4>
+                            <t>Mobile Working</t>
+                        </h4>
+                    </div>
+                    <div class="row my-3">
+                        <div class="col">
+                            <input name="barcode"
+                                   type="text"
+                                   class="form-control form-control-lg"
+                                   autofocus="autofocus"
+                                   autocomplete="off"
+                                   placeholder="Workcenter id"/>
+                        </div>
+                    </div>
+                    <t t-if="error">
+                        <div class="alert alert-danger" role="alert">
+                            <t t-esc="error"/>
+                        </div>
+                    </t>
+                    <div class="row my-3">
+                        <div class="col">
+                            <button name="btn"
+                                    type="submit"
+                                    class="btn btn-danger btn-lg btn-block"
+                                    value="exit"
+                                    >
+                                Exit
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row my-3">
+                        <div class="col">
+                            <t t-foreach="wcs" t-as="wc">
+                                <t t-if="wc.count_open_wo!=0">
+                                    <t t-if="wc.working_state=='normal'">
+                                        <a t-attf-href="/mobile_mrp_working/open_wos/{{wc.id}}"
+                                           class="btn btn-warning btn-lg btn-block mb8">
+                                            <t t-esc="wc.id"/>
+                                            [<t t-esc="wc.code"/>]
+                                            <t t-esc="wc.name"/>
+                                            (<t t-esc="wc.count_open_wo"/>)
+                                        </a>
+                                    </t>
+                                    <t t-if="wc.working_state=='blocked'">
+                                        <a t-attf-href="/mobile_mrp_working/open_wos/{{wc.id}}"
+                                           class="btn btn-danger btn-lg btn-block mb8">
+                                            <t t-esc="wc.id"/>
+                                            [<t t-esc="wc.code"/>]
+                                            <t t-esc="wc.name"/>
+                                            (<t t-esc="wc.count_open_wo"/>)
+                                        </a>
+                                    </t>
+                                    <t t-if="wc.working_state=='done'">
+                                        <a t-attf-href="/mobile_mrp_working/open_wos/{{wc.id}}"
+                                           class="btn btn-success btn-lg btn-block mb8">
+                                            <t t-esc="wc.id"/>
+                                            [<t t-esc="wc.code"/>]
+                                            <t t-esc="wc.name"/>
+                                            (<t t-esc="wc.count_open_wo"/>)
+                                        </a>
+                                    </t>
+                                </t>
+                            </t>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </t>
+    </template>
+</odoo>

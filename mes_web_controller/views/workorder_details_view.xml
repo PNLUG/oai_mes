@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="workorder_details">
+        <t t-call="web.html_container">
+            <!-- _todo_ spostare in static css -->
+            <style>
+                h4 {
+                margin-bottom:initial;
+                }
+
+                // Hide arrows from input type=number
+                /* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+            </style>
+            <t class="container">
+                <form action="/mobile_mrp_working/done/" method="POST">
+                    <input name="csrf_token" type="hidden" t-att-value="request.csrf_token()"/>
+                    <input name="wc_id" type="hidden" t-att-value="workcenter.id"/>
+                    <input name="productivity_id" type="hidden" t-att-value="productivity.id"/>
+                    <div class="row my-3">
+                        <div class="col-9 rounded d-flex align-items-center" style="background-color:LightGray;">
+                            <h4>Workcenter [<t t-esc="wo.workcenter_id.code"/>]
+                                <t t-esc="wo.workcenter_id.name"/>
+                            </h4>
+                        </div>
+                        <div class="col-2 d-flex align-items-center">
+                            <h4 id="timer" t-att-data-value="data_start_msec"/>
+                        </div>
+                        <div class="col-1 d-flex align-items-center justify-content-end">
+                            <button class="btn" name="btn" value="back" type="submit">
+                                <span class="fa fa-arrow-left fa-2x"/>
+                            </button>
+                            <button name="btn"
+                                    type="submit"
+                                    class="btn"
+                                    style="background-color:red;color:white;"
+                                    value="block"
+                                    >
+                                <span class="fa fa-exclamation-triangle fa-2x"/>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row my-3">
+                        <t t-foreach="productivity.employee_ids" t-as="employee">
+                            <div class="bg-primary rounded col d-flex align-items-center mx-1">
+                                <h4>
+                                    <t t-esc="employee.employee_id.name"/>
+                                </h4>
+                            </div>
+                        </t>
+                        <div class="col-1 d-flex align-items-center justify-content-end">
+                            <button name="btn"
+                                    type="submit"
+                                    class="btn btn-primary fa fa-users fa-2x"
+                                    value="employees"/>
+                        </div>
+                    </div>
+
+                    <t t-if="action=='working'">
+                        <div class="row my-3">
+                            <div class="col-1 d-flex align-items-center">
+                                <div name="start_wo2"
+                                     class="btn"
+                                     style="background-color:green;color:white;">
+                                    <span class="fa fa-play fa-2x"/>
+                                </div>
+                            </div>
+                            <div class="col-2 d-flex align-items-center">
+                                <h4>
+                                    <t t-esc="wo.id"/>
+                                </h4>
+                            </div>
+                            <div class="col-6 d-flex align-items-center">
+                                <h4>
+                                    <t t-esc="wo.name"/>
+                                </h4>
+                            </div>
+                            <div class="col-3 rounded d-flex align-items-center"
+                                 style="background-color:green">
+                                <h4>Working</h4>
+                            </div>
+                        </div>
+                    </t>
+                    <t t-if="action=='setup'">
+                        <div class="row my-3">
+                            <div class="col-1 d-flex align-items-center">
+                                <div name="setup_wo2"
+                                     class="btn"
+                                     style="background-color:orange;color:white;">
+                                    <span class="fa fa-wrench fa-2x"/>
+                                </div>
+                            </div>
+                            <div class="col-2 d-flex align-items-center">
+                                <h4>
+                                    <t t-esc="wo.id"/>
+                                </h4>
+                            </div>
+                            <div class="col-6 d-flex align-items-center">
+                                <h4>
+                                    <t t-esc="wo.name"/>
+                                </h4>
+                            </div>
+                            <div class="col-3 rounded d-flex align-items-center"
+                                 style="background-color:orange">
+                                <h4>Setup</h4>
+                            </div>
+                        </div>
+                    </t>
+                    <div class="row my-3">
+                        <div class="col-9">
+                            <div class="row">
+                                <div class="col-3">
+                                    <span style="font-weight:strong;">Sale Plan</span>
+                                </div>
+                                <div class="col">
+                                    <t t-esc="wo.plan_id.name"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3">
+                                    <span style="font-weight:strong;">Sale Order</span>
+                                </div>
+                                <div class="col">
+                                    <t t-esc="wo.sale_id.name"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3" style="font-weight:strong;">
+                                    <span style="font-weight:strong;">Manuf.Order</span>
+                                </div>
+                                <div class="col">
+                                    <t t-esc="wo.production_id.name"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3">
+                                    <span style="font-weight:strong;">Product</span>
+                                </div>
+                                <div class="col">
+                                    <t t-esc="wo.product_id.display_name"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3"
+                                     style="font-weight:strong;">
+                                    <span style="font-weight:strong;">Planned Start</span>
+                                </div>
+                                <div class="col">
+                                    <t t-if="wo.date_planned_start">
+                                        <span t-esc="website.local_time(wo.date_planned_start).strftime('%d/%m/%Y %H:%M')"/>
+                                    </t>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3"
+                                     style="font-weight:strong;">
+                                    <span style="font-weight:strong;">Planned Finished</span>
+                                </div>
+                                <div class="col">
+                                    <t t-if="wo.date_planned_finished">
+                                        <span t-esc="website.local_time(wo.date_planned_finished).strftime('%d/%m/%Y %H:%M')"/>
+                                    </t>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3"
+                                     style="font-weight:strong;">
+                                    <span style="font-weight:strong;">Expected Duration</span>
+                                </div>
+                                <div class="col">
+                                    <t t-esc="website.secs_to_hrs(wo.duration_expected)"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3"
+                                     style="font-weight:strong;">
+                                    <span style="font-weight:strong;">Duration</span>
+                                </div>
+                                <div class="col">
+                                    <t t-esc="website.secs_to_hrs(wo.duration)"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3"
+                                     style="font-weight:strong;">
+                                    <span style="font-weight:strong;">Quantity to Do</span>
+                                </div>
+                                <div class="col">
+                                    <t t-esc="int(wo.qty_production)"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3"
+                                     style="font-weight:strong;">
+                                    <span style="font-weight:strong;">Quantity Done</span>
+                                </div>
+                                <div class="col">
+                                    <t t-esc="int(wo.qty_produced)"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-3 d-flex align-items-center justify-content-center">
+                                <img t-att-src="'/web/image/product.template/%s/image_1920' % wo.product_id.product_tmpl_id.id"
+                                     style="height:160px;width:160px;"
+                                     alt="Product"/>
+                        </div>
+                    </div>
+                    <div class="row my-3 rounded"
+                         style="background-color:LightGray;color:black">
+                        <div class="col">
+                            <t t-esc="wo.product_id.description"/>
+                        </div>
+                    </div>
+                    <t t-if="error">
+                        <div class="alert alert-danger" role="alert">
+                            <t t-esc="error"/>
+                        </div>
+                    </t>
+                    <t t-if="action=='working'">
+                        <div id="controls">
+                            <div class="row">
+                                <div class="col-3">
+                                    Quantity Producing (<span t-esc="int(wo.qty_production) - int(wo.qty_produced)"/>)
+                                </div>
+                                <div class="col-3">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <button id="qty_ok_minus"
+                                                    type="button"
+                                                    class="btn btn-lg btn-outline-success fa fa-minus"
+                                                    />
+                                        </div>
+                                        <input id="qty_ok"
+                                               name="pcs_ok"
+                                               type="number"
+                                               class="form-control form-control-lg"
+                                               autofocus="autofocus"
+                                               autocomplete="off"/>
+                                        <div class="input-group-append">
+                                            <button id="qty_ok_plus"
+                                                    type="button"
+                                                    class="btn btn-lg btn-outline-success fa fa-plus"
+                                                    />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-3">
+                                    Quantity Scraps
+                                </div>
+                                <div class="col-3">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <button id="qty_ko_minus"
+                                                    type="button"
+                                                    class="btn btn-lg btn-outline-danger fa fa-minus"
+                                                    />
+                                        </div>
+                                        <input id="qty_ko"
+                                               name="pcs_ko"
+                                               type="number"
+                                               class="form-control form-control-lg"
+                                               autofocus="autofocus"
+                                               autocomplete="off"/>
+                                        <div class="input-group-append">
+                                            <button id="qty_ko_plus"
+                                                    type="button"
+                                                    class="btn btn-lg btn-outline-danger fa fa-plus"
+                                                    />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col d-flex align-items-center">
+                                    <button name="btn"
+                                            type="submit"
+                                            class="btn my-3 btn-lg btn-block btn-success"
+                                            value="record_production"
+                                            >
+                                        <h4>Record Production</h4>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                    <t t-if="action=='setup'">
+                        <div id="controls">
+                            <div class="row">
+                                <div class="col d-flex align-items-center">
+                                    <button name="btn"
+                                            type="submit"
+                                            class="btn my-3 btn-lg btn-block btn-warning"
+                                            value="record_setup"
+                                            >
+                                        <h4>Record Setup</h4>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                    <iframe id="iframe_production_worksheet"
+                            frameborder="0"
+                            width="100%" height="500px"
+                            t-if="wo.production_id.worksheet"
+                            t-attf-src="/web/static/lib/pdfjs/web/viewer.html?file=%2Fweb%2Fimage%3Fmodel%3Dmrp.production%26field%3Dworksheet%26id%3D{{wo.production_id.id}}#page=1" />
+                    <iframe id="iframe_workorder_worksheet"
+                            frameborder="0"
+                            width="100%" height="500px"
+                            t-if="wo.worksheet"
+                            t-attf-src="/web/static/lib/pdfjs/web/viewer.html?file=%2Fweb%2Fimage%3Fmodel%3Dmrp.workorder%26field%3Dworksheet%26id%3D{{wo.id}}#page=1" />
+                </form>
+            </t>
+        </t>
+        <script>
+            /* _todo_ muovere in static js */
+            /* timer */
+            function msToTime(s) {
+
+                function pad(n, z) {
+                    z = z || 2;
+                    return ('00' + n).slice(-z);
+                    }
+
+                var ms = s % 1000;
+                s = (s - ms) / 1000;
+                var secs = s % 60;
+                s = (s - secs) / 60;
+                var mins = s % 60;
+                var hrs = (s - mins) / 60;
+                return pad(hrs) + ':' + pad(mins) + ':' + pad(secs);
+                }
+
+            function myTimer() {
+                var now = new Date();
+                var start = new Date(parseInt($("#timer").data('value')));
+                t = now-start;
+                $("#timer").html(msToTime(t));
+                }
+
+            function qty_ok_plus() {
+                var qty = document.getElementById("qty_ok").value;
+                if (!qty) {
+                    qty = 0;
+                    }
+                qty = parseInt(qty);
+                qty +=1;
+                document.getElementById("qty_ok").value = qty;
+                }
+
+            /* _todo_ controllare jquery
+                $("#qty_ok_plus").onclick = qty_ok_plus;
+            */
+            document.getElementById("qty_ok_plus").onclick = qty_ok_plus;
+
+            function qty_ok_minus() {
+                var qty = document.getElementById("qty_ok").value;
+                if (!qty) {
+                    qty = 0;
+                    }
+                else {
+                    qty = parseInt(qty);
+                    qty -=1;
+                    if (qty &lt; 0) {
+                        qty = 0
+                        }
+                    }
+                document.getElementById("qty_ok").value = qty;
+                }
+
+            /* _todo_ controllare jquery
+                $("#qty_ok_minus").onclick = qty_ok_minus;
+            */
+            document.getElementById("qty_ok_minus").onclick = qty_ok_minus;
+
+            function qty_ko_plus() {
+                var qty = document.getElementById("qty_ko").value;
+                if (!qty) {
+                    qty = 0;
+                    }
+                qty = parseInt(qty);
+                qty +=1;
+                document.getElementById("qty_ko").value = qty;
+                }
+
+            /* _todo_ controllare jquery
+                $("#qty_ko_plus").onclick = qty_ko_plus;
+            */
+            document.getElementById("qty_ko_plus").onclick = qty_ko_plus;
+
+            function qty_ko_minus() {
+                var qty = document.getElementById("qty_ko").value;
+                if (!qty) {
+                    qty = 0;
+                    }
+                else {
+                    qty = parseInt(qty);
+                    qty -=1;
+                    if (qty &lt; 0) {
+                        qty = 0
+                        }
+                    }
+                document.getElementById("qty_ko").value = qty;
+                }
+
+            /* _todo_ controllare jquery
+                $("#qty_ko_minus").onclick = qty_ko_minus;
+            */
+            document.getElementById("qty_ko_minus").onclick = qty_ko_minus;
+
+            myTimer()
+            var myVar = setInterval(myTimer, 1000);
+        </script>
+    </template>
+
+</odoo>

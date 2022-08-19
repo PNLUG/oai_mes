@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="employee_list">
+        <t t-call="web.html_container">
+            <style>
+                h4 {
+                margin-bottom:initial;
+                }
+            </style>
+            <div class="container">
+                <form action="/mobile_mrp_working/employees/" method="POST">
+                    <input name="csrf_token" type="hidden" t-att-value="request.csrf_token()"/>
+                    <input name="productivity_id" type="hidden" t-att-value="productivity_id"/>
+                    <div class="row my-3">
+                        <div class="col-11">
+                            <input name="barcode"
+                                   type="text"
+                                   class="form-control form-control-lg"
+                                   autofocus="autofocus"
+                                   autocomplete="off"
+                                   placeholder="Employee ID"/>
+                        </div>
+                        <div class="col-1 d-flex align-items-center justify-content-end">
+                            <button name="btn"
+                                    class="btn btn-info"
+                                    value="add">
+                                <span class="fa fa-search fa-2x"/>
+                            </button>
+                        </div>
+                    </div>
+                    <t t-foreach="employees" t-as="employee">
+                        <div class="row my-3">
+                            <div class="col-2 d-flex align-items-center">
+                                <h4>
+                                    <t t-esc="employee.employee_id.id"/>
+                                </h4>
+                            </div>
+                            <div class="col-6 d-flex align-items-center">
+                                <h4>
+                                    <t t-esc="employee.employee_id.name"/>
+                                </h4>
+                            </div>
+                            <div class="col-3 d-flex align-items-center">
+                                <h4>
+                                    <t t-esc="employee.employee_id.work_phone"/>
+                                </h4>
+                            </div>
+                            <div class="col-1 d-flex align-items-center">
+                                <button name="delete"
+                                        type="submit"
+                                        class="btn btn-danger fa fa-times fa-2x"
+                                        t-att-value="employee.id"/>
+                            </div>
+                        </div>
+                    </t>
+                    <t t-if="error">
+                        <div class="alert alert-danger" role="alert">
+                            <t t-esc="error"/>
+                        </div>
+                    </t>
+                    <div class="row my-3">
+                        <button name="btn"
+                                type="submit"
+                                class="btn my-3 btn-lg btn-block btn-info"
+                                value="back">
+                            <h4>Back</h4>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </t>
+    </template>
+
+</odoo>

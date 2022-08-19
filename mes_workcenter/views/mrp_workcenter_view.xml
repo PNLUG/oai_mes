@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="mrp_workcenter_form_view_custom" model="ir.ui.view">
+        <field name="name">mrp.workcenter.form.custom</field>
+        <field name="model">mrp.workcenter</field>
+        <field name="inherit_id" ref="mrp.mrp_workcenter_view" />
+        <field name="arch" type="xml">
+
+            <field name="name" position="after">
+                <field name="parent_id" />
+            </field>
+            <xpath expr="//field[@name='time_stop']/ancestor::group" position="after">
+                <group>
+                    <field name="count_open_wo" readonly="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
