@@ -5,15 +5,21 @@
         <field name="model">mrp.workcenter</field>
         <field name="inherit_id" ref="mrp.mrp_workcenter_view" />
         <field name="arch" type="xml">
-
-            <field name="name" position="after">
-                <field name="parent_id" />
-            </field>
             <xpath expr="//field[@name='time_stop']/ancestor::group" position="after">
                 <group>
                     <field name="count_open_wo" readonly="1"/>
                 </group>
             </xpath>
+        </field>
+    </record>
+
+    <record id="mrp_workcenter_tree_view" model="ir.ui.view">
+        <field name="model">mrp.workcenter</field>
+        <field name="inherit_id" ref="mrp.mrp_workcenter_tree_view" />
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="count_open_wo" />
+            </field>
         </field>
     </record>
 </odoo>
