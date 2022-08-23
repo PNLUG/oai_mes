@@ -1,1 +1,1 @@
-Add field to manage _todo_
+Add reference to sale plan

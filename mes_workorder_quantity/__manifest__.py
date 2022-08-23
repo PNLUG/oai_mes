@@ -10,7 +10,8 @@
     "maintainers": [],
     "website": "",
     "depends": [
-        "manufacture",
+        # ODOO
+        "mrp",
         ],
     "data": [],
     "application": False,

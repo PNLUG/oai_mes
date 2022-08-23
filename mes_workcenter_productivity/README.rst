@@ -25,7 +25,7 @@ Workcenter Productivity custom fields
 
 |badge1| |badge2| |badge3| |badge4| |badge5| 
 
-Add status of productivity an some utility fields
+Add status of productivity an fields for produced and scraped quantity
 
 **Table of contents**
 

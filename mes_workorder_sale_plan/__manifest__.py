@@ -14,6 +14,7 @@
         "manufacture",
         # OSD
         # _todo_ riferimento corretto? oppre addons_oi
+        # Open Industry
         "mrp_sale_plan",
         ],
     "data": [],
