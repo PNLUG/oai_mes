@@ -5,7 +5,7 @@ from odoo.http import request
 
 class Main(http.Controller):
     @http.route(
-        "/mobile_mrp_working/",
+        "/mes_wc_working/",
         type="http",
         csrf=False,
         auth="user",
@@ -13,7 +13,7 @@ class Main(http.Controller):
         )
     def main(self, **post):
         """
-        show workcenter with wo
+        show workcenter with workorder to do
         """
         wcs = request.env["mrp.workcenter"].search(
             [("count_open_wo", "!=", 0)],
@@ -23,4 +23,4 @@ class Main(http.Controller):
             "title": "Workcenter loaded",
             "wcs": wcs,
             }
-        return request.render("mn_web_controller.workcenter_list", values)
+        return request.render("mes_web_controller.workcenter_working", values)

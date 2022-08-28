@@ -137,10 +137,6 @@
                                                 <span t-esc="website.secs_to_hrs(wo.duration_expected)"/>
                                             </td>
                                             <td>
-                                                [<span t-esc="wo.plan_id.name"/>]
-                                                <span t-esc="wo.plan_id.note"/>
-                                            </td>
-                                            <td>
                                                 <span t-esc="wo.sale_id.name"/>
                                             </td>
                                             <td>

@@ -11,18 +11,22 @@
 
     "depends": [
         # _todo_
+        # ODOO
+        "web",
+
         # OCA
 
         # CUSTOM
-        "mn_stock_scrap",
-    ],
+        "web_mobile_menu",
+        ],
     "data": [
-        "views/alert_list_view.xml",
-        "views/employee_list_view.xml",
-        "views/workcenter_list_view.xml",
-        "views/workorder_details_view.xml",
+        "views/mobile_menu.xml",
+        # "views/alert_list_view.xml",
+        # "views/employee_list_view.xml",
+        "views/workcenter_working_view.xml",
+        # "views/workorder_details_view.xml",
         "views/workorder_list_view.xml",
-    ],
+        ],
     "application": False,
     "installable": True,
     "auto_install": False,

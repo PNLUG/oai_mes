@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="web_mobile_template" inherit_id="web_mobile_menu.web_mobile_template" name="Mobile Menu Template">
+        <xpath expr="//div[@id='sample_route']" position="attributes">
+            <attribute name="hidden">hidden</attribute>
+        </xpath>
+        <xpath expr="//div[@id='sample_route']" position="after">
+            <hr/>
+            <div id="mes_wc_working" class="row justify-content-center">
+                <a href="/mes_wc_working" class="btn btn-danger btn-lg btn-block mb8"
+                    >Workcenter with Workorder</a>
+            </div>
+        </xpath>
+    </template>
+
+</odoo>

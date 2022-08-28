@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <template id="workcenter_list">
+    <template id="workcenter_working">
         <t t-call="web.html_container">
             <div class="container">
-                <form action="/mobile_mrp_working/open_wos/" method="POST">
+                <form action="/mes_wc_working/open_wos/" method="POST">
                     <input name="csrf_token" type="hidden" t-att-value="request.csrf_token()"/>
                     <div class="row justify-content-center my-3">
                         <h4>
-                            <t>Mobile Working</t>
+                            <t>Workcenter with Workorder</t>
                         </h4>
                     </div>
                     <div class="row my-3">
@@ -33,7 +33,7 @@
                                     class="btn btn-danger btn-lg btn-block"
                                     value="exit"
                                     >
-                                Exit
+                                Main Menu
                             </button>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                             <t t-foreach="wcs" t-as="wc">
                                 <t t-if="wc.count_open_wo!=0">
                                     <t t-if="wc.working_state=='normal'">
-                                        <a t-attf-href="/mobile_mrp_working/open_wos/{{wc.id}}"
+                                        <a t-attf-href="/mes_wc_working/open_wos/{{wc.id}}"
                                            class="btn btn-warning btn-lg btn-block mb8">
                                             <t t-esc="wc.id"/>
                                             [<t t-esc="wc.code"/>]
@@ -51,7 +51,7 @@
                                         </a>
                                     </t>
                                     <t t-if="wc.working_state=='blocked'">
-                                        <a t-attf-href="/mobile_mrp_working/open_wos/{{wc.id}}"
+                                        <a t-attf-href="/mes_wc_working/open_wos/{{wc.id}}"
                                            class="btn btn-danger btn-lg btn-block mb8">
                                             <t t-esc="wc.id"/>
                                             [<t t-esc="wc.code"/>]
@@ -60,7 +60,7 @@
                                         </a>
                                     </t>
                                     <t t-if="wc.working_state=='done'">
-                                        <a t-attf-href="/mobile_mrp_working/open_wos/{{wc.id}}"
+                                        <a t-attf-href="/mes_wc_working/open_wos/{{wc.id}}"
                                            class="btn btn-success btn-lg btn-block mb8">
                                             <t t-esc="wc.id"/>
                                             [<t t-esc="wc.code"/>]

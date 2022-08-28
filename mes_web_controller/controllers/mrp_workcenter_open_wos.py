@@ -1,14 +1,34 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+from collections import _OrderedDictKeysView
 from odoo import http, _
 from odoo.http import request
 import pytz
 
 
 class Main(http.Controller):
+
+    def wc_order(self, wc):
+        """
+        returns active workorders of a workcenter
+        @param wc : workcenter
+        """
+        # _todo_ decidere come gestire il caso di gerarchia wc con presenza di parent_id
+        # se c'è un parent_id non vengono caricati ordini sul wc?
+        orders = request.env["mrp.workorder"].search(
+            [
+                ("workcenter_id", "=", wc.id),
+                ("state", "not in", ["done", "cancel"]),
+                ("production_state", "not in", ["draft", "done", "cancel"]),
+            ],
+            limit=200,
+            order="date_planned_start",
+            )
+        return orders
+
     @http.route(
         [
-            "/mobile_mrp_working/open_wos/<workcenter_id>",
-            "/mobile_mrp_working/open_wos/",
+            "/mes_wc_working/open_wos/<workcenter_id>",
+            "/mes_wc_working/open_wos/",
         ],
         type="http",
         csrf=False,
@@ -26,8 +46,9 @@ class Main(http.Controller):
         local = pytz.timezone(user_tz)
         btn = post.get("btn", False)
         barcode = post.get("barcode", False)
+        workcenter_id = False
 
-        if btn == "exit":
+        if False and btn == "exit":
             # go back to main menu
             return http.local_redirect("/mobile")
         if barcode:
@@ -38,28 +59,8 @@ class Main(http.Controller):
             if not wc.active:
                 # _todo_ sistemare messaggio
                 raise Exception
-            if not wc.parent_id:
-                # get wo of the wc
-                wos = request.env["mrp.workorder"].search(
-                    [
-                        ("workcenter_id", "=", wc.id),
-                        ("state", "not in", ["done", "cancel"]),
-                        ("production_state", "not in", ["draft", "done", "cancel"]),
-                    ],
-                    limit=200,
-                    order="date_planned_start",
-                )
-            else:
-                # get wo of the parent wc
-                wos = request.env["mrp.workorder"].search(
-                    [
-                        ("workcenter_id.parent_id", "=", wc.parent_id.id),
-                        ("state", "not in", ["done", "cancel"]),
-                        ("production_state", "not in", ["draft", "done", "cancel"]),
-                    ],
-                    limit=200,
-                    order="date_planned_start",
-                )
+
+            wos = self.wc_order(wc)
 
             values = {
                 "title": "Workorder of the Workcenter",
@@ -71,7 +72,7 @@ class Main(http.Controller):
                 [("workcenter_id", "=", wc.id), ("date_end", "=", False)],
                 order="date_start desc",
                 limit=1,
-            )
+                )
             # _todo_ gestire se ci sono più productivity
             if productivity.id:
                 # show productivity data
@@ -90,7 +91,7 @@ class Main(http.Controller):
                             "data_start_msec": date_start_ms,
                         }
                     )
-                    return request.render("mn_web_controller.workorder_details", values)
+                    return request.render("mes_web_controller.workorder_details", values)
                 else:
                     # _???_ show productivity loss
                     values = {
@@ -99,12 +100,12 @@ class Main(http.Controller):
                         "data_start_msec": date_start_ms,
                         "employee_ids": productivity.employee_ids,
                     }
-                    return request.render("mn_web_controller.alert_list", values)
+                    return request.render("mes_web_controller.alert_list", values)
             else:
                 # show wo of the wc
-                return request.render("mn_web_controller.workorder_list", values)
-        except request.exceptions:
-            # _todo_ verificare se except request.exceptions: va bene
+                return request.render("mes_web_controller.workorder_list", values)
+        except:
+            # _todo_ capire che variabile passare ad exception (flake8)
             # pop wrong barcode message and show wc list
             wcs = request.env["mrp.workcenter"].search([])
             values = {
@@ -112,4 +113,4 @@ class Main(http.Controller):
                 "wcs": wcs,
                 "error": _("Error: barcode not found"),
             }
-            return request.render("mn_web_controller.workcenter_list", values)
+            return request.render("mes_web_controller.workcenter_list", values)
