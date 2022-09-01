@@ -28,13 +28,10 @@
                     </t>
                     <div class="row my-3">
                         <div class="col">
-                            <button name="btn"
-                                    type="submit"
-                                    class="btn btn-danger btn-lg btn-block"
-                                    value="exit"
-                                    >
-                                Main Menu
-                            </button>
+                            <div id="main" class="justify-content-center">
+                                <a href="/menu" class="btn btn-danger btn-lg btn-block mb8"
+                                    >Menu</a>
+                            </div>
                         </div>
                     </div>
                     <div class="row my-3">

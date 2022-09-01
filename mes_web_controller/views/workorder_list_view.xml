@@ -13,22 +13,24 @@
                     <input name="csrf_token" type="hidden" t-att-value="request.csrf_token()"/>
                     <input name="wc_id" type="hidden" t-att-value="wc.id"/>
                     <div class="row my-3">
+                        <div class="col-1 d-flex align-items-center" align="center">
+                            <button class="btn"
+                                    onclick="history.back()">
+                                <span class="fa fa-arrow-left fa-2x"/>
+                            </button>
+                        </div>
                         <div class="col-9 rounded d-flex align-items-center"
                              style="background-color:LightGray;">
                             <h4>Workcenter [<t t-esc="wc.code"/>]
                                 <t t-esc="wc.name"/>
                             </h4>
                         </div>
-                        <div class="col-2 d-flex align-items-center" align="center">
+                        <div class="col-1 d-flex align-items-center" align="center">
                             <h4>Open
                                 <t t-esc="wc.count_open_wo"/>
                             </h4>
                         </div>
                         <div class="col-1 d-flex align-items-center justify-content-end">
-                            <button class="btn"
-                                    onclick="history.back()">
-                                <span class="fa fa-arrow-left fa-2x"/>
-                            </button>
                             <button name="btn"
                                     type="submit"
                                     class="btn"
@@ -88,7 +90,6 @@
                                     <th>Todo</th>
                                     <th>Done</th>
                                     <th>Time</th>
-                                    <th>Plan</th>
                                     <th>SO</th>
                                     <th>MO</th>
                                 </thead>

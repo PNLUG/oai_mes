@@ -20,7 +20,7 @@
         "web_mobile_menu",
         ],
     "data": [
-        "views/mobile_menu.xml",
+        "views/web_menu.xml",
         # "views/alert_list_view.xml",
         # "views/employee_list_view.xml",
         "views/workcenter_working_view.xml",

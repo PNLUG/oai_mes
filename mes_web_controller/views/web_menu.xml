@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-    <template id="web_mobile_template" inherit_id="web_mobile_menu.web_mobile_template" name="Mobile Menu Template">
+    <template id="web_menu_template" inherit_id="web_menu.web_menu_template" name="Menu">
         <xpath expr="//div[@id='sample_route']" position="attributes">
             <attribute name="hidden">hidden</attribute>
         </xpath>

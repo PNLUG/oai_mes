@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <record id="oee_form_view" model="ir.ui.view">
+        <field name="name">mrp.workcenter.productivity.form</field>
+        <field name="model">mrp.workcenter.productivity</field>
+        <field name="inherit_id" ref="mrp.oee_form_view" />
+        <field name="arch" type="xml">
+            <!-- _todo_ correggere selezione employee -->
+            <xpath expr="//field[@name='workcenter_id']" position="after">
+                <field name="employee_ids"/>
+            </xpath>
+        </field>
+    </record>
+
+    </data>
+</odoo>

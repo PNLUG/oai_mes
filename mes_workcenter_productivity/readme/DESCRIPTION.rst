@@ -1,1 +1,1 @@
-Add status of productivity an fields for produced and scraped quantity
+Add status of productivity and fields for produced and scraped quantity

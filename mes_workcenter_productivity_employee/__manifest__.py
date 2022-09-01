@@ -10,10 +10,14 @@
     "maintainers": [],
     "website": "",
     "depends": [
-        "manufacture",
+        # OCB
+        "mrp",
         "hr",
-    ],
-    "data": [],
+        ],
+    "data": [
+        "security/ir.model.access.csv",
+        "views/mrp_workcenter_views.xml",
+        ],
     "application": False,
     "installable": True,
     "auto-install": False,

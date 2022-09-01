@@ -46,8 +46,8 @@ class Main(http.Controller):
         local = pytz.timezone(user_tz)
         btn = post.get("btn", False)
         barcode = post.get("barcode", False)
-        workcenter_id = False
 
+        # _todo_ gestire exit inmodo diverso
         if False and btn == "exit":
             # go back to main menu
             return http.local_redirect("/mobile")

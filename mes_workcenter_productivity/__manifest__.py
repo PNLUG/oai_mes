@@ -12,8 +12,10 @@
     "depends": [
         # OCB
         "mrp",
-    ],
-    "data": [],
+        ],
+    "data": [
+        "views/mrp_workcenter_views.xml",
+        ],
     "application": False,
     "installable": True,
     "auto-install": False,
