@@ -3,7 +3,8 @@ from odoo import models, fields
 
 class ProductivityEmployees(models.Model):
     """
-    associate an enploee to a production _todo_ guisto?
+    associate an enploee to a production _???_ guisto?
+    _???_ perché creare un modello invece di aggiungere una relazione a employee?
     """
     _name = "mrp.workcenter.productivity.employee"
     _rec_name = "employee_id"

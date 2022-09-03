@@ -6,9 +6,11 @@
         <field name="model">mrp.workcenter.productivity</field>
         <field name="inherit_id" ref="mrp.oee_form_view" />
         <field name="arch" type="xml">
-            <!-- _todo_ correggere selezione employee -->
             <xpath expr="//field[@name='workcenter_id']" position="after">
+                <!-- _todo_ correggere selezione employee -->
                 <field name="employee_ids"/>
+                <!-- _???_ tentativo di collegare employee -->
+                <field name="xemployee_ids"/>
             </xpath>
         </field>
     </record>
