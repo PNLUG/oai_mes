@@ -1,0 +1,46 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mes_workcenter_load
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-10 10:59+0000\n"
+"PO-Revision-Date: 2022-09-10 10:59+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: mes_workcenter_load
+#: model:ir.model,name:mes_workcenter_load.model_mrp_workcenter
+msgid "Count Open Workorder"
+msgstr ""
+
+#. module: mes_workcenter_load
+#: model:ir.model.fields,field_description:mes_workcenter_load.field_mrp_workcenter__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: mes_workcenter_load
+#: model:ir.model.fields,field_description:mes_workcenter_load.field_mrp_workcenter__id
+msgid "ID"
+msgstr ""
+
+#. module: mes_workcenter_load
+#: model:ir.model.fields,field_description:mes_workcenter_load.field_mrp_workcenter____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: mes_workcenter_load
+#: model:ir.model.fields,field_description:mes_workcenter_load.field_mrp_workcenter__count_open_wo
+msgid "Open Workorders"
+msgstr ""
+
+#. module: mes_workcenter_load
+#: model:ir.model.fields,help:mes_workcenter_load.field_mrp_workcenter__count_open_wo
+msgid "Workorders in status different than done and cancel"
+msgstr ""

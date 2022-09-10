@@ -1,0 +1,41 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mes_productivity_employee
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-10 11:52+0000\n"
+"PO-Revision-Date: 2022-09-10 11:52+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: mes_productivity_employee
+#: model:ir.model.fields,field_description:mes_productivity_employee.field_mrp_workcenter_productivity__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: mes_productivity_employee
+#: model:ir.model.fields,field_description:mes_productivity_employee.field_mrp_workcenter_productivity__employee_ids
+msgid "Employees"
+msgstr ""
+
+#. module: mes_productivity_employee
+#: model:ir.model.fields,field_description:mes_productivity_employee.field_mrp_workcenter_productivity__id
+msgid "ID"
+msgstr ""
+
+#. module: mes_productivity_employee
+#: model:ir.model.fields,field_description:mes_productivity_employee.field_mrp_workcenter_productivity____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: mes_productivity_employee
+#: model:ir.model,name:mes_productivity_employee.model_mrp_workcenter_productivity
+msgid "Workcenter Productivity Log"
+msgstr ""

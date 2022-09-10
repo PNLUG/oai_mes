@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="workorder_list">
+        <t t-call="web.html_container">
+            <style>
+                h4 {
+                margin-bottom:initial;
+                }
+            </style>
+            <t class="container">
+                <form action="/mobile_mrp_working/wo/" method="POST">
+                    <input name="csrf_token" type="hidden" t-att-value="request.csrf_token()"/>
+                    <input name="wc_id" type="hidden" t-att-value="wc.id"/>
+                    <div class="row my-3">
+                        <div class="col-1 d-flex align-items-center" align="center">
+                            <button class="btn"
+                                    onclick="history.back()">
+                                <span class="fa fa-arrow-left fa-2x"/>
+                            </button>
+                        </div>
+                        <div class="col-9 rounded d-flex align-items-center"
+                             style="background-color:LightGray;">
+                            <h4>Workcenter [<t t-esc="wc.code"/>]
+                                <t t-esc="wc.name"/>
+                            </h4>
+                        </div>
+                        <div class="col-1 d-flex align-items-center" align="center">
+                            <h4>Open
+                                <t t-esc="wc.count_open_wo"/>
+                            </h4>
+                        </div>
+                        <div class="col-1 d-flex align-items-center justify-content-end">
+                            <button name="btn"
+                                    type="submit"
+                                    class="btn"
+                                    style="background-color:red;color:white;"
+                                    value="block">
+                                <span class="fa fa-exclamation-triangle fa-2x"/>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row my-3">
+                        <div class="col-5">
+                            <input name="barcode2"
+                                   type="text"
+                                   class="form-control form-control-lg"
+                                   autofocus="autofocus"
+                                   autocomplete="off"
+                                   placeholder="Workorder id"/>
+                        </div>
+                        <div class="col-1">
+                            <button name="btn"
+                                    class="btn btn-secondary"
+                                    value="barcode">
+                                <span class="fa fa-play fa-2x"/>
+                            </button>
+                        </div>
+                        <div class="col-5">
+                            <input name="search2"
+                                   type="text"
+                                   class="form-control form-control-lg"
+                                   autocomplete="off"
+                                   t-att-value="search2"
+                                   placeholder="Search"/>
+                        </div>
+                        <div class="col-1 d-flex align-items-center justify-content-end">
+                            <button name="btn"
+                                    class="btn btn-secondary"
+                                    value="search">
+                                <span class="fa fa-search fa-2x"/>
+                            </button>
+                        </div>
+                    </div>
+                    <t t-if="error">
+                        <div class="alert alert-danger" role="alert">
+                            <t t-esc="error"/>
+                        </div>
+                    </t>
+                    <div class="row my-3">
+                        <div class="col-12">
+                            <table class="table">
+                                <thead>
+                                    <th>Start</th>
+                                    <th>Setup</th>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Code</th>
+                                    <th>Date</th>
+                                    <th>Todo</th>
+                                    <th>Done</th>
+                                    <th>Time</th>
+                                    <th>MO</th>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="wos" t-as="wo">
+                                        <tr>
+                                            <td>
+                                                <button name="start_wo"
+                                                        type="submit"
+                                                        class="btn"
+                                                        style="background-color:green;color:white;"
+                                                        t-att-value="wo.id">
+                                                    <span class="fa fa-play fa-2x"/>
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <button name="setup_wo"
+                                                        type="submit"
+                                                        class="btn"
+                                                        style="background-color:orange;color:white;"
+                                                        t-att-value="wo.id">
+                                                    <span class="fa fa-wrench fa-2x"/>
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <span t-esc="wo.id"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="wo.name"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="wo.product_id.display_name"/>
+                                            </td>
+                                            <td>
+                                                <t t-if="wo.date_planned_start">
+                                                    <span t-esc="website.local_time(wo.date_planned_start).strftime('%d/%m/%Y %H:%M')"/>
+                                                </t>
+                                            </td>
+                                            <td>
+                                                <span t-esc="int(wo.production_id.product_qty)"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="int(wo.qty_produced)"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="website.secs_to_hrs(wo.duration_expected)"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="wo.production_id.name"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </form>
+            </t>
+        </t>
+    </template>
+
+</odoo>

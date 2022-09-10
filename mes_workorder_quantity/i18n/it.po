@@ -1,0 +1,48 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mes_workorder_quantity
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-10 12:06+0000\n"
+"PO-Revision-Date: 2022-09-10 14:08+0200\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.3\n"
+"Last-Translator: \n"
+"Language: it\n"
+
+#. module: mes_workorder_quantity
+#: model:ir.model.fields,field_description:mes_workorder_quantity.field_mrp_workorder__display_name
+msgid "Display Name"
+msgstr "Nome visualizzato"
+
+#. module: mes_workorder_quantity
+#: model:ir.model.fields,field_description:mes_workorder_quantity.field_mrp_workorder__id
+msgid "ID"
+msgstr "ID"
+
+#. module: mes_workorder_quantity
+#: model:ir.model.fields,field_description:mes_workorder_quantity.field_mrp_workorder____last_update
+msgid "Last Modified on"
+msgstr "Ultima modifica il"
+
+#. module: mes_workorder_quantity
+#: model:ir.model.fields,field_description:mes_workorder_quantity.field_mrp_workorder__qty_produced
+msgid "Qty produced"
+msgstr "Quantità prodotta"
+
+#. module: mes_workorder_quantity
+#: model:ir.model.fields,help:mes_workorder_quantity.field_mrp_workorder__qty_produced
+msgid "The number of products already handled by this work order"
+msgstr "Quantità già lavorata da questo ordine di lavoro"
+
+#. module: mes_workorder_quantity
+#: model:ir.model,name:mes_workorder_quantity.model_mrp_workorder
+msgid "Work Order"
+msgstr "Ordine di lavoro"

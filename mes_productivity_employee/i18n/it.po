@@ -1,0 +1,43 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mes_productivity_employee
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-10 11:52+0000\n"
+"PO-Revision-Date: 2022-09-10 13:54+0200\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.3\n"
+"Last-Translator: \n"
+"Language: it\n"
+
+#. module: mes_productivity_employee
+#: model:ir.model.fields,field_description:mes_productivity_employee.field_mrp_workcenter_productivity__display_name
+msgid "Display Name"
+msgstr "Nome visualizzato"
+
+#. module: mes_productivity_employee
+#: model:ir.model.fields,field_description:mes_productivity_employee.field_mrp_workcenter_productivity__employee_ids
+msgid "Employees"
+msgstr "Dipendenti"
+
+#. module: mes_productivity_employee
+#: model:ir.model.fields,field_description:mes_productivity_employee.field_mrp_workcenter_productivity__id
+msgid "ID"
+msgstr "ID"
+
+#. module: mes_productivity_employee
+#: model:ir.model.fields,field_description:mes_productivity_employee.field_mrp_workcenter_productivity____last_update
+msgid "Last Modified on"
+msgstr "Ultima modifica il"
+
+#. module: mes_productivity_employee
+#: model:ir.model,name:mes_productivity_employee.model_mrp_workcenter_productivity
+msgid "Workcenter Productivity Log"
+msgstr "Registro produzione centro di lavoro"

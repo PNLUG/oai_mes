@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <record id="oee_form_view" model="ir.ui.view">
+        <field name="name">mrp.workcenter.productivity.form</field>
+        <field name="model">mrp.workcenter.productivity</field>
+        <field name="inherit_id" ref="mrp.oee_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='loss_id']" position="after">
+                <field name="qty_produced"/>
+                <field name="qty_scraped"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="oee_tree_view" model="ir.ui.view">
+        <field name="name">mrp.workcenter.productivity.tree</field>
+        <field name="model">mrp.workcenter.productivity</field>
+        <field name="inherit_id" ref="mrp.oee_tree_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='duration']" position="after">
+                <field name="qty_produced"/>
+                <field name="qty_scraped"/>
+            </xpath>
+        </field>
+    </record>
+    </data>
+</odoo>

@@ -1,0 +1,140 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mes_web_controller
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-10 12:55+0000\n"
+"PO-Revision-Date: 2022-09-10 12:55+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: mes_web_controller
+#: code:addons/mes_web_controller/controllers/mobile_mrp_working_done.py:0
+#: code:addons/mes_web_controller/controllers/mobile_mrp_working_done.py:0
+#, python-format
+msgid "At least one employee must be specified"
+msgstr ""
+
+#. module: mes_web_controller
+#: model_terms:ir.ui.view,arch_db:mes_web_controller.workorder_list
+msgid "Code"
+msgstr ""
+
+#. module: mes_web_controller
+#: model_terms:ir.ui.view,arch_db:mes_web_controller.workorder_list
+msgid "Date"
+msgstr ""
+
+#. module: mes_web_controller
+#: model_terms:ir.ui.view,arch_db:mes_web_controller.workorder_list
+msgid "Done"
+msgstr ""
+
+#. module: mes_web_controller
+#: code:addons/mes_web_controller/controllers/mobile_mrp_working_wo.py:0
+#, python-format
+msgid "ERROR: Barcode not found"
+msgstr ""
+
+#. module: mes_web_controller
+#: code:addons/mes_web_controller/controllers/mobile_mrp_working_employees.py:0
+#: code:addons/mes_web_controller/controllers/mobile_mrp_working_employees.py:0
+#, python-format
+msgid "Employee id not found (barcode error)"
+msgstr ""
+
+#. module: mes_web_controller
+#: code:addons/mes_web_controller/controllers/mrp_workcenter_open_wos.py:0
+#, python-format
+msgid "Error: barcode not found"
+msgstr ""
+
+#. module: mes_web_controller
+#: model_terms:ir.ui.view,arch_db:mes_web_controller.workorder_list
+msgid "ID"
+msgstr ""
+
+#. module: mes_web_controller
+#: code:addons/mes_web_controller/controllers/mobile_mrp_working_alert.py:0
+#, python-format
+msgid "Loss reference not found (barcode error)"
+msgstr ""
+
+#. module: mes_web_controller
+#: model_terms:ir.ui.view,arch_db:mes_web_controller.workorder_list
+msgid "MO"
+msgstr ""
+
+#. module: mes_web_controller
+#: model_terms:ir.ui.view,arch_db:mes_web_controller.workcenter_working
+msgid "Menu"
+msgstr ""
+
+#. module: mes_web_controller
+#: model_terms:ir.ui.view,arch_db:mes_web_controller.workorder_list
+msgid "Name"
+msgstr ""
+
+#. module: mes_web_controller
+#: model_terms:ir.ui.view,arch_db:mes_web_controller.workorder_list
+msgid "Open"
+msgstr ""
+
+#. module: mes_web_controller
+#: model_terms:ir.ui.view,arch_db:mes_web_controller.workorder_list
+msgid "Search"
+msgstr ""
+
+#. module: mes_web_controller
+#: model_terms:ir.ui.view,arch_db:mes_web_controller.workorder_list
+msgid "Setup"
+msgstr ""
+
+#. module: mes_web_controller
+#: model_terms:ir.ui.view,arch_db:mes_web_controller.workorder_list
+msgid "Start"
+msgstr ""
+
+#. module: mes_web_controller
+#: model_terms:ir.ui.view,arch_db:mes_web_controller.workorder_list
+msgid "Time"
+msgstr ""
+
+#. module: mes_web_controller
+#: model_terms:ir.ui.view,arch_db:mes_web_controller.workorder_list
+msgid "Todo"
+msgstr ""
+
+#. module: mes_web_controller
+#: code:addons/mes_web_controller/controllers/mobile_mrp_working_employees.py:0
+#, python-format
+msgid "User already present"
+msgstr ""
+
+#. module: mes_web_controller
+#: model_terms:ir.ui.view,arch_db:mes_web_controller.workorder_list
+msgid "Workcenter ["
+msgstr ""
+
+#. module: mes_web_controller
+#: model_terms:ir.ui.view,arch_db:mes_web_controller.workcenter_working
+msgid "Workcenter id"
+msgstr ""
+
+#. module: mes_web_controller
+#: model_terms:ir.ui.view,arch_db:mes_web_controller.web_menu_template
+#: model_terms:ir.ui.view,arch_db:mes_web_controller.workcenter_working
+msgid "Workcenter with Workorder"
+msgstr ""
+
+#. module: mes_web_controller
+#: model_terms:ir.ui.view,arch_db:mes_web_controller.workorder_list
+msgid "Workorder id"
+msgstr ""

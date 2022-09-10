@@ -17,15 +17,15 @@
         # OCA
 
         # CUSTOM
-        "web_mobile_menu",
+        "web_menu",
         ],
     "data": [
         "views/web_menu.xml",
-        # "views/alert_list_view.xml",
-        # "views/employee_list_view.xml",
-        "views/workcenter_working_view.xml",
-        # "views/workorder_details_view.xml",
-        "views/workorder_list_view.xml",
+        "views/workcenter_working.xml",
+        "views/workorder_list.xml",
+        # "views/alert_list.xml",
+        # "views/employee_list.xml",
+        # "views/workorder_details.xml",
         ],
     "application": False,
     "installable": True,

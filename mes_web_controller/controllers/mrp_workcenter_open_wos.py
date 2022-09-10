@@ -1,5 +1,4 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-from collections import _OrderedDictKeysView
 from odoo import http, _
 from odoo.http import request
 import pytz

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="workcenter_working">
+        <t t-call="web.html_container">
+            <div class="container">
+                <form action="/mes_wc_working/open_wos/" method="POST">
+                    <input name="csrf_token" type="hidden" t-att-value="request.csrf_token()"/>
+                    <div class="row justify-content-center my-3">
+                        <h4>
+                            <t>Workcenter with Workorder</t>
+                        </h4>
+                    </div>
+                    <div class="row my-3">
+                        <div class="col">
+                            <input name="barcode"
+                                   type="text"
+                                   class="form-control form-control-lg"
+                                   autofocus="autofocus"
+                                   autocomplete="off"
+                                   placeholder="Workcenter id"/>
+                        </div>
+                    </div>
+                    <t t-if="error">
+                        <div class="alert alert-danger" role="alert">
+                            <t t-esc="error"/>
+                        </div>
+                    </t>
+                    <div class="row my-3">
+                        <div class="col">
+                            <div id="main" class="justify-content-center">
+                                <a href="/menu" class="btn btn-primary btn-lg btn-block mb8"
+                                    >Menu</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row my-3">
+                        <div class="col">
+                            <t t-foreach="wcs" t-as="wc">
+                                <div>
+                                <t t-if="wc.count_open_wo!=0">
+                                    <a t-attf-href="/mes_wc_working/open_wos/{{wc.id}}">
+                                        <t t-if="wc.working_state=='normal'">
+                                            <span class="btn btn-secondary btn-lg mb8">
+                                                <span style="opacity: 0.5;">[<t t-esc="wc.id"/>]</span>
+                                                <span style="font-weight: bold;"><t t-esc="wc.code"/></span>
+                                                <t t-esc="wc.name"/>
+                                                </span>
+                                            </t>
+                                        <t t-if="wc.working_state=='blocked'">
+                                            <span class="btn btn-danger btn-lg mb8">
+                                                <span style="opacity: 0.5;">[<t t-esc="wc.id"/>]</span>
+                                                <span style="font-weight: bold;"><t t-esc="wc.code"/></span>
+                                                <t t-esc="wc.name"/>
+                                                </span>
+                                            </t>
+                                        <t t-if="wc.working_state=='done'">
+                                            <span class="btn btn-success btn-lg mb8">
+                                                <span style="opacity: 0.5;">[<t t-esc="wc.id"/>]</span>
+                                                <span style="font-weight: bold;"><t t-esc="wc.code"/></span>
+                                                <t t-esc="wc.name"/>
+                                                </span>
+                                            </t>
+                                        <span class="btn btn-info btn-lg mb8">
+                                            <t t-esc="wc.count_open_wo"/>
+                                            </span>
+                                    </a>
+                                </t>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </t>
+    </template>
+</odoo>
