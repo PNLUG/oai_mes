@@ -6,7 +6,7 @@ import pytz
 
 class Main(http.Controller):
     @http.route(
-        "/mobile_mrp_working/alert/",
+        "/mes_wc_working/alert/",
         type="http",
         csrf=False,
         auth="user",
@@ -33,7 +33,7 @@ class Main(http.Controller):
         if wc_id:
             wc = request.env["mrp.workcenter"].browse(int(wc_id))
         else:
-            return http.local_redirect("/mobile_mrp_working")
+            return http.local_redirect("/mes_wc_working")
 
         if post.get("btn", False) == "employees":
             # show employee list
@@ -46,7 +46,7 @@ class Main(http.Controller):
                 "productivity_id": productivity.id,
                 "employees": productivity.employee_ids,
                 }
-            return request.render("mn_web_controller.employee_list", values)
+            return request.render("mes_web_controller.employee_list", values)
 
         if barcode:
             try:
@@ -58,9 +58,9 @@ class Main(http.Controller):
                     .exists()
                     )
                 if not loss:
+                    # _todo_ gestire messaggio eccezzione
                     raise Exception
-            except request.exceptions:
-                # _todo_ verificare se except request.exceptions: va bene
+            except Exception:
                 alerts = request.env["mrp.workcenter.productivity.loss"].search(
                     [
                         ("loss_type", "=", "availability"),
@@ -73,9 +73,9 @@ class Main(http.Controller):
                     "title": "Mobile Alert",
                     "alerts": alerts,
                     "workcenter": wc,
-                    "error": _("Loss reference not found (barcode error)"),
+                    "error": _("Loss reference not found (code error)"),
                     }
-                return request.render("mn_web_controller.alert_list", values)
+                return request.render("mes_web_controller.alert_list", values)
 
         if loss_id:
             # record productivity loss
@@ -92,7 +92,7 @@ class Main(http.Controller):
                     "workcenter_id": wc.id,
                     "loss_id": loss_id,
                     "employee_ids": [(0, 0, {"employee_id": e}) for e in employees.ids],
-                    "action": "block",
+                    "status": "stopped",
                 }
                 )
             time_start = productivity.date_start.astimezone(local)
@@ -103,8 +103,8 @@ class Main(http.Controller):
                 "data_start_msec": date_start_ms,
                 "employee_ids": productivity.employee_ids,
                 }
-            return request.render("mn_web_controller.alert_list", values)
+            return request.render("mes_web_controller.alert_list", values)
         else:
             # show wo list
             wc.unblock()
-            return http.local_redirect("/mobile_mrp_working/open_wos/" + str(wc_id))
+            return http.local_redirect("/mes_wc_working/open_wos/" + str(wc_id))

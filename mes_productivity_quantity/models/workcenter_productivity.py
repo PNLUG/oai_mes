@@ -4,12 +4,10 @@ from odoo import models, fields
 class MrpWorkcenterProductivity(models.Model):
     _inherit = "mrp.workcenter.productivity"
 
-    # _todo_ trovare vistra productivity e visualizzare campi nuovi
-    # _todo_ verificare come vengono alimentati
+    # _todo_ verificare come vengono alimentati => da metodi controller
 
     # new fields
     # qty done
-    # _???_ a cosa serve se c'è nel WO?
     qty_produced = fields.Float(
         string="Qty Produced",
         default=0.0,

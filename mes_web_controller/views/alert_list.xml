@@ -9,7 +9,7 @@
                 }
             </style>
             <div class="container">
-                <form action="/mobile_mrp_working/alert/" method="POST">
+                <form action="/mes_wc_working/alert/" method="POST">
                     <input name="csrf_token" type="hidden" t-att-value="request.csrf_token()"/>
                     <input name="workcenter_id" type="hidden" t-att-value="workcenter.id"/>
                     <input name="productivity_id" type="hidden" t-if="productivity" t-att-value="productivity.id"/>

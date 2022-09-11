@@ -46,16 +46,16 @@ class Main(http.Controller):
         btn = post.get("btn", False)
         barcode = post.get("barcode", False)
 
-        # _todo_ gestire exit inmodo diverso
+        # _todo_ gestire exit in modo diverso
         if False and btn == "exit":
             # go back to main menu
-            return http.local_redirect("/mobile")
+            return http.local_redirect("/menu")
         if barcode:
             workcenter_id = barcode
         try:
             wc_id = int(workcenter_id)
             wc = request.env["mrp.workcenter"].browse(wc_id)
-            if not wc.active:
+            if not wc:
                 # _todo_ sistemare messaggio
                 raise Exception
 
@@ -78,7 +78,7 @@ class Main(http.Controller):
                 time_start = productivity.date_start.astimezone(local)
                 date_start_ms = time_start.timestamp() * 1000  # value to pass to jquery
 
-                if not productivity.loss_id.manual:  # oppure action = block _???_
+                if not productivity.loss_id.manual:
                     # _???_ show wo details
                     values.update(
                         {
@@ -86,11 +86,14 @@ class Main(http.Controller):
                             "productivity": productivity,
                             "workcenter": wc,
                             "wo": productivity.workorder_id,
-                            "action": productivity.action,
+                            "state": productivity.loss_id.loss_state,
                             "data_start_msec": date_start_ms,
                         }
                     )
-                    return request.render("mes_web_controller.workorder_details", values)
+                    return request.render(
+                        "mes_web_controller.workorder_details",
+                        values
+                        )
                 else:
                     # _???_ show productivity loss
                     values = {
@@ -103,8 +106,7 @@ class Main(http.Controller):
             else:
                 # show wo of the wc
                 return request.render("mes_web_controller.workorder_list", values)
-        except:
-            # _todo_ capire che variabile passare ad exception (flake8)
+        except Exception:
             # pop wrong barcode message and show wc list
             wcs = request.env["mrp.workcenter"].search([])
             values = {

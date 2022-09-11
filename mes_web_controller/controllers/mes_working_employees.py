@@ -6,7 +6,7 @@ import pytz
 
 class Main(http.Controller):
     @http.route(
-        "/mobile_mrp_working/employees/",
+        "/mes_wc_working/employees/",
         type="http",
         csrf=False,
         auth="user",
@@ -43,13 +43,13 @@ class Main(http.Controller):
                 "productivity": productivity,
                 "workcenter": productivity.workcenter_id,
                 "wo": productivity.workorder_id,
-                "action": productivity.action,
+                "status": productivity.loss_id.loss_state,
                 "employee_ids": productivity.employee_ids,
                 }
             if productivity.action == "block":
-                return request.render("mn_web_controller.alert_list", values)
+                return request.render("mes_web_controller.alert_list", values)
             else:
-                return request.render("mn_web_controller.workorder_details", values)
+                return request.render("mes_web_controller.workorder_details", values)
 
         elif post.get("btn", False) == "add":
             # check and add employee to productivity
@@ -59,16 +59,18 @@ class Main(http.Controller):
                     if request.env["hr.employee"].browse(employee_id).exists():
                         if (
                             employee_id
-                            in productivity.employee_ids.mapped("employee_id").ids
+                            in productivity.employee_ids.mapped("id")
+                            # _???_ verificare logica controllo
                         ):
                             values["error"] = _("User already present")
                         else:
                             productivity.write(
-                                {"employee_ids": [(0, 0, {"employee_id": employee_id})]}
+                                #{"employee_ids": [(0, 0, {"employee_id": employee_id})]}
+                                {"employee_ids": employee_id}
                             )
                     else:
                         values["error"] = _("Employee id not found (barcode error)")
-                except request.exceptions:
+                except Exception:
                     # _todo_ verificare se except request.exceptions: va bene
                     values["error"] = _("Employee id not found (barcode error)")
         elif post.get("delete", False):
@@ -82,4 +84,4 @@ class Main(http.Controller):
                 "employees": productivity.employee_ids,
             }
         )
-        return request.render("mn_web_controller.employee_list", values)
+        return request.render("mes_web_controller.employee_list", values)

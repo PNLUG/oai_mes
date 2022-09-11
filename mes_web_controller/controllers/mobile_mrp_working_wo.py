@@ -108,7 +108,7 @@ class Main(http.Controller):
                         order="date_planned_start",
                         )
                 if not wos:
-                    # search by sale order _???_ search by client
+                    # search by client sale order ref
                     domain4 = domain.copy()
                     domain4.append(("sale_id.client_order_ref", "ilike", search2))
                     wos = request.env["mrp.workorder"].search(
@@ -171,7 +171,7 @@ class Main(http.Controller):
             .search([("workcenter_id", "=", wc.id)], order="date_start desc", limit=1)
             .employee_ids.mapped("employee_id")
             )
-        # _???_ cosa fa questo comando
+        # start wo production
         wo.button_start()
         productivity = request.env["mrp.workcenter.productivity"].search(
             [

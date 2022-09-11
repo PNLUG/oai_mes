@@ -6,7 +6,6 @@
         <field name="model">mrp.workorder</field>
         <field name="inherit_id" ref="mrp.mrp_production_workorder_form_view_inherit" />
         <field name="arch" type="xml">
-            <!-- _todo_ spostare campo e pulire -->
             <xpath expr="//notebook" position="before">
                 <group>
                     <field name="qty_produced"/>
