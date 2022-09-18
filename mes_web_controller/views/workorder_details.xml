@@ -2,53 +2,66 @@
 <odoo>
 
     <template id="workorder_details">
+        <script type="text/javascript" src="/mes_web_controller/static/src/js/mes_web_controller.js"></script>
+        <script type="text/javascript" src="/mes_web_controller/static/src/js/workorder_details.js"></script>
+        <link rel="stylesheet" href="/mes_web_controller/static/src/css/mes_controller.css"/>
         <t t-call="web.html_container">
-            <!-- _todo_ spostare in static css -->
-            <style>
-                h4 {
-                margin-bottom:initial;
-                }
-
-                // Hide arrows from input type=number
-                /* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Firefox */
-input[type=number] {
-  -moz-appearance: textfield;
-}
-            </style>
             <t class="container">
+                <t>vista workorder_details</t>
                 <form action="/mes_wc_working/done/" method="POST">
                     <input name="csrf_token" type="hidden" t-att-value="request.csrf_token()"/>
                     <input name="wc_id" type="hidden" t-att-value="workcenter.id"/>
                     <input name="productivity_id" type="hidden" t-att-value="productivity.id"/>
                     <div class="row my-3">
-                        <div class="col-9 rounded d-flex align-items-center" style="background-color:LightGray;">
+                        <div class="col-2 d-flex align-items-center" align="center">
+                            <button name="btn"
+                                    class="btn cursor_evi"
+                                    type="submit"
+                                    style="background-color:blue; color:white;"
+                                    value="back"
+                                    >
+                                <span class="fa fa-arrow-left fa-2x"/>
+                                <br/>
+                                <span style="font-weight: bold; vertical-align: middle;">Workcenters</span>
+                            </button>
+                        </div>
+                        <div class="col-4 rounded d-flex align-items-center"
+                             style="background-color:LightGray;">
+                            <span style="opacity: .5; font-size: .8em; position: absolute; top: 0px;">
+                                Workcenter [ID <t t-esc="wo.workcenter_id.id"/>]
+                                </span>
                             <h4>
-                                <span style="opacity: 0.5;">Workcenter </span>
-                                <span style="font-weight: bold;"><t t-esc="wo.workcenter_id.code"/></span>
                                 <t t-esc="wo.workcenter_id.name"/>
+                                <t t-if="wo.workcenter_id.code">
+                                    (<span style="font-weight: bold;"><t t-esc="wo.workcenter_id.code"/></span>)
+                                </t>
+                            </h4>
+                        </div>
+                        <div class="col-2 rounded d-flex align-items-center"
+                             style="background-color:lightgreen; color:black;">
+                            <span style="opacity: .5; font-size: .8em; position: absolute; top: 0px;">
+                                Workorder
+                                </span>
+                            <h4>
+                                ID <t t-esc="wo.id"/>
                             </h4>
                         </div>
                         <div class="col-2 d-flex align-items-center">
-                            <h4 id="timer" t-att-data-value="data_start_msec"/>
+                            <t t-if="data_start_msec">
+                                <h4 id="timer" t-att-data-value="data_start_msec"/>
+                                </t>
+                            <t t-if="not data_start_msec">
+                                <h4 id="timer" data-value=""/>
+                                </t>
                         </div>
-                        <div class="col-1 d-flex align-items-center justify-content-end">
-                            <button class="btn" name="btn" value="back" type="submit">
-                                <span class="fa fa-arrow-left fa-2x"/>
-                            </button>
-                            <button name="btn"
+                        <div class="col-2 d-flex align-items-center justify-content-end">
+                            <button name="action"
                                     type="submit"
-                                    class="btn"
+                                    class="btn cursor_evi"
                                     style="background-color:red; color:white;"
-                                    value="block"
-                                    >
-                                <span class="fa fa-exclamation-triangle fa-2x"/>
+                                    value="block">
+                                <span style="font-weight: bold; vertical-align: middle; font-size: 1.5em;">Stop</span>
+                                <span class="fa fa-exclamation-triangle fa-2x" style="vertical-align: middle;"/>
                             </button>
                         </div>
                     </div>
@@ -304,100 +317,11 @@ input[type=number] {
             </t>
         </t>
         <script>
-            /* _todo_ muovere in static js */
-            /* timer */
-            function msToTime(s) {
-
-                function pad(n, z) {
-                    z = z || 2;
-                    return ('00' + n).slice(-z);
-                    }
-
-                var ms = s % 1000;
-                s = (s - ms) / 1000;
-                var secs = s % 60;
-                s = (s - secs) / 60;
-                var mins = s % 60;
-                var hrs = (s - mins) / 60;
-                return pad(hrs) + ':' + pad(mins) + ':' + pad(secs);
-                }
-
-            function myTimer() {
-                var now = new Date();
-                var start = new Date(parseInt($("#timer").data('value')));
-                t = now-start;
-                $("#timer").html(msToTime(t));
-                }
-
-            function qty_ok_plus() {
-                var qty = document.getElementById("qty_ok").value;
-                if (!qty) {
-                    qty = 0;
-                    }
-                qty = parseInt(qty);
-                qty +=1;
-                document.getElementById("qty_ok").value = qty;
-                }
-
-            /* _todo_ controllare jquery
-                $("#qty_ok_plus").onclick = qty_ok_plus;
-            */
-            document.getElementById("qty_ok_plus").onclick = qty_ok_plus;
-
-            function qty_ok_minus() {
-                var qty = document.getElementById("qty_ok").value;
-                if (!qty) {
-                    qty = 0;
-                    }
-                else {
-                    qty = parseInt(qty);
-                    qty -=1;
-                    if (qty &lt; 0) {
-                        qty = 0
-                        }
-                    }
-                document.getElementById("qty_ok").value = qty;
-                }
-
-            /* _todo_ controllare jquery
-                $("#qty_ok_minus").onclick = qty_ok_minus;
-            */
-            document.getElementById("qty_ok_minus").onclick = qty_ok_minus;
-
-            function qty_ko_plus() {
-                var qty = document.getElementById("qty_ko").value;
-                if (!qty) {
-                    qty = 0;
-                    }
-                qty = parseInt(qty);
-                qty +=1;
-                document.getElementById("qty_ko").value = qty;
-                }
-
-            /* _todo_ controllare jquery
-                $("#qty_ko_plus").onclick = qty_ko_plus;
-            */
-            document.getElementById("qty_ko_plus").onclick = qty_ko_plus;
-
-            function qty_ko_minus() {
-                var qty = document.getElementById("qty_ko").value;
-                if (!qty) {
-                    qty = 0;
-                    }
-                else {
-                    qty = parseInt(qty);
-                    qty -=1;
-                    if (qty &lt; 0) {
-                        qty = 0
-                        }
-                    }
-                document.getElementById("qty_ko").value = qty;
-                }
-
-            /* _todo_ controllare jquery
-                $("#qty_ko_minus").onclick = qty_ko_minus;
-            */
-            document.getElementById("qty_ko_minus").onclick = qty_ko_minus;
+        <!-- _todo_ trovare come eseguirlo su onready della pagina-->
+            $("#qty_ok_plus").onclick = qty_ok_plus;
+            $("#qty_ok_minus").onclick = qty_ok_minus;
+            $("#qty_ko_plus").onclick = qty_ko_plus;
+            $("#qty_ko_minus").onclick = qty_ko_minus;
 
             myTimer()
             var myVar = setInterval(myTimer, 1000);

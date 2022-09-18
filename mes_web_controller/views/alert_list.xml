@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
+    <!-- _todo_ cambiare nome alert_list -->
     <template id="alert_list">
+        <script type="text/javascript" src="/mes_web_controller/static/src/js/mes_web_controller.js"></script>
+        <link rel="stylesheet" href="/mes_web_controller/static/src/css/mes_controller.css"/>
         <t t-call="web.html_container">
-            <style>
-                h4 {
-                margin-bottom:initial;
-                }
-            </style>
             <div class="container">
                 <form action="/mes_wc_working/alert/" method="POST">
                     <input name="csrf_token" type="hidden" t-att-value="request.csrf_token()"/>
@@ -133,33 +130,8 @@
                 </form>
             </div>
         </t>
-        <script>
-            /* _todo_ spostare in libreria static */
-            /* timer */
-
-            function msToTime(s) {
-
-                function pad(n, z) {
-                    z = z || 2;
-                    return ('00' + n).slice(-z);
-                    }
-
-                var ms = s % 1000;
-                s = (s - ms) / 1000;
-                var secs = s % 60;
-                s = (s - secs) / 60;
-                var mins = s % 60;
-                var hrs = (s - mins) / 60;
-                return pad(hrs) + ':' + pad(mins) + ':' + pad(secs);
-                }
-
-            function myTimer() {
-                var now = new Date();
-                var start = new Date(parseInt($("#timer").data('value')));
-                t = now-start;
-                $("#timer").html(msToTime(t));
-                }
-
+         <script>
+            <!-- _todo_ trovare come eseguirlo su onready della pagina-->
             myTimer()
             var myVar = setInterval(myTimer, 1000);
         </script>

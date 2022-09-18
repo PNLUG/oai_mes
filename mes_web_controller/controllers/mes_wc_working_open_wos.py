@@ -37,23 +37,25 @@ class Main(http.Controller):
     def workorders(self, workcenter_id=None, **post):
         """
         _todo_
-        @param btn : exit
-        @param barcode : id of the workcenter
-        @workcenter_id : id of the workcenter
+        POST params
+        @param view_wc : id of the workcenter
+        @param view_wo : id of the workorder
         """
+
+        # _todo_ cambiare nome variabile barcode
         user_tz = request.env.user.tz or pytz.utc
         local = pytz.timezone(user_tz)
-        btn = post.get("btn", False)
-        barcode = post.get("barcode", False)
+        view_wc = post.get("view_wc", False)
+        view_wo = post.get("view_wo", False)
 
-        # _todo_ gestire exit in modo diverso
-        if False and btn == "exit":
-            # go back to main menu
-            return http.local_redirect("/menu")
-        if barcode:
-            workcenter_id = barcode
+        if view_wo:
+            # redirect to wo details
+            return http.local_redirect("/mes_wc_working/wo/%s" % view_wo)
+
+        workcenter_id = int(workcenter_id) if workcenter_id else False
+
         try:
-            wc_id = int(workcenter_id)
+            wc_id = int(view_wc) if view_wc else workcenter_id
             wc = request.env["mrp.workcenter"].browse(wc_id)
             if not wc:
                 # _todo_ sistemare messaggio
@@ -66,7 +68,7 @@ class Main(http.Controller):
                 "wc": wc,
                 "wos": wos,
                 }
-            # get open productivity
+            # get last open productivity
             productivity = request.env["mrp.workcenter.productivity"].search(
                 [("workcenter_id", "=", wc.id), ("date_end", "=", False)],
                 order="date_start desc",
@@ -79,7 +81,7 @@ class Main(http.Controller):
                 date_start_ms = time_start.timestamp() * 1000  # value to pass to jquery
 
                 if not productivity.loss_id.manual:
-                    # _???_ show wo details
+                    # if production isn't stoped (loss_id.manual=true) show wo details
                     values.update(
                         {
                             "title": "Workorder of the Workcenter",
@@ -88,30 +90,39 @@ class Main(http.Controller):
                             "wo": productivity.workorder_id,
                             "state": productivity.loss_id.loss_state,
                             "data_start_msec": date_start_ms,
-                        }
-                    )
+                            }
+                        )
                     return request.render(
                         "mes_web_controller.workorder_details",
                         values
                         )
                 else:
-                    # _???_ show productivity loss
+                    # if production is stoped (loss_id.manual=true) show wo loss info
                     values = {
                         "productivity": productivity,
                         "workcenter": wc,
                         "data_start_msec": date_start_ms,
                         "employee_ids": productivity.employee_ids,
-                    }
-                    return request.render("mes_web_controller.alert_list", values)
+                        }
+                    return request.render(
+                            "mes_web_controller.alert_list",
+                            values
+                            )
             else:
                 # show wo of the wc
-                return request.render("mes_web_controller.workorder_list", values)
+                return request.render(
+                    "mes_web_controller.workorder_list",
+                    values
+                    )
         except Exception:
-            # pop wrong barcode message and show wc list
+            # pop wrong workcenter_id message and show wc list
             wcs = request.env["mrp.workcenter"].search([])
             values = {
                 "title": "Workorder of the Workcenter",
                 "wcs": wcs,
-                "error": _("Error: barcode not found"),
-            }
-            return request.render("mes_web_controller.workcenter_list", values)
+                "error": _("ERROR: Workcenter ID %s not found" % workcenter_id),
+                }
+            return request.render(
+                "mes_web_controller.workcenter_working",
+                values
+                )

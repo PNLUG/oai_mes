@@ -6,7 +6,7 @@ import pytz
 
 class Main(http.Controller):
     @http.route(
-        "/mobile_mrp_working/done/",
+        "/mes_wc_working/done/",
         type="http",
         csrf=False,
         auth="user",
@@ -39,7 +39,7 @@ class Main(http.Controller):
 
         if post.get("btn", False) == "back":
             # goes to main view
-            return http.local_redirect("/mobile_mrp_working")
+            return http.local_redirect("/mes_wc_working")
 
         if post.get("btn", False) == "employees":
             # open employee view

@@ -2,80 +2,107 @@
 <odoo>
 
     <template id="workcenter_working">
+        <link rel="stylesheet" href="/mes_web_controller/static/src/css/mes_controller.css"/>
         <t t-call="web.html_container">
             <div class="container">
+                <div class="row justify-content-center my-3">
+                    <div class="col-3 d-flex align-items-left" align="left">
+                        <a href="/menu" class="btn btn-primary btn-lg btn-block mb8"
+                            >Menu</a>
+                    </div>
+                    <div class="col-6 d-flex align-items-center" align="center">
+                        <div style="width: 100%; text-align: center !important;">
+                            <h4>
+                                <t>Workcenter with open Workorder</t>
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="col-3 d-flex align-items-left" align="left">
+                        <a href="/mes_wc_working" class="btn btn-primary btn-lg btn-block mb8"
+                            >Update</a>
+                    </div>
+                </div>
                 <form action="/mes_wc_working/open_wos/" method="POST">
                     <input name="csrf_token" type="hidden" t-att-value="request.csrf_token()"/>
                     <div class="row justify-content-center my-3">
-                        <div class="col-3 d-flex align-items-left" align="left">
-                            <a href="/menu" class="btn btn-primary btn-lg btn-block mb8"
-                                >Menu</a>
-                        </div>
-                        <div class="col-6 d-flex align-items-center" align="center">
-                            <div style="width: 100%; text-align: center !important;">
-                                <h4>
-                                    <t>Workcenter with open Workorder</t>
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="col-3 d-flex align-items-right" align="right">
-                            <input name="barcode"
+                        <div class="col-4 d-flex align-items-right" align="right">
+                            <input id="view_wc"
+                                   name="view_wc"
                                    type="text"
                                    class="form-control form-control-lg"
                                    autofocus="autofocus"
+                                   onfocus="$('#view_wo').val('');"
                                    autocomplete="off"
-                                   placeholder="Workcenter id"/>
+                                   placeholder="Search Workcenter id"/>
                         </div>
-                    </div>
-                    <t t-if="error">
-                        <div class="alert alert-danger" role="alert">
-                            <t t-esc="error"/>
+                        <div class="col-4 d-flex align-items-right" align="right">
+                            <input id="view_wo"
+                                   name="view_wo"
+                                   type="text"
+                                   class="form-control form-control-lg"
+                                   onfocus="$('#view_wc').val('');"
+                                   autocomplete="off"
+                                   placeholder="Search Workorder id"/>
                         </div>
-                    </t>
-                    <div class="row my-3">
-                        <div class="col">
-                            <t t-foreach="wcs" t-as="wc">
-                                <div>
-                                <t t-if="wc.count_open_wo!=0">
-                                    <a t-attf-href="/mes_wc_working/open_wos/{{wc.id}}">
-                                        <!-- _todo_ refactor using t-attf-class -->
-                                        <t t-if="wc.working_state=='normal'">
-                                            <span class="btn btn-secondary btn-lg mb8">
-                                                <span style="opacity: 0.5;">[<t t-esc="wc.id"/>]</span>
-                                                <span style="font-weight: bold;"><t t-esc="wc.code"/></span>
-                                                <t t-esc="wc.name"/>
-                                                <span class="btn btn-info btn-lg mb8">
-                                                    <t t-esc="wc.count_open_wo"/>
-                                                    </span>
-                                                </span>
-                                            </t>
-                                        <t t-if="wc.working_state=='blocked'">
-                                            <span class="btn btn-danger btn-lg mb8">
-                                                <span style="opacity: 0.5;">[<t t-esc="wc.id"/>]</span>
-                                                <span style="font-weight: bold;"><t t-esc="wc.code"/></span>
-                                                <t t-esc="wc.name"/>
-                                                <span class="btn btn-info btn-lg mb8">
-                                                    <t t-esc="wc.count_open_wo"/>
-                                                    </span>
-                                                </span>
-                                            </t>
-                                        <t t-if="wc.working_state=='done'">
-                                            <span class="btn btn-success btn-lg mb8">
-                                                <span style="opacity: 0.5;">[<t t-esc="wc.id"/>]</span>
-                                                <span style="font-weight: bold;"><t t-esc="wc.code"/></span>
-                                                <t t-esc="wc.name"/>
-                                                <span class="btn btn-info btn-lg mb8">
-                                                    <t t-esc="wc.count_open_wo"/>
-                                                    </span>
-                                                </span>
-                                            </t>
-                                    </a>
-                                </t>
-                                </div>
-                            </t>
-                        </div>
+                        <button type="submit" hidden="hidden">
+                            <!-- used to activate form on enter -->
+                            </button>
                     </div>
                 </form>
+                <t t-if="error">
+                    <div class="alert alert-danger" role="alert">
+                        <t t-esc="error"/>
+                    </div>
+                </t>
+                <div class="row my-3">
+                    <div class="col">
+                        <t t-foreach="wcs" t-as="wc">
+                            <div>
+                            <t t-if="wc.count_open_wo!=0">
+                                <a t-attf-href="/mes_wc_working/open_wos/{{wc.id}}">
+                                    <!-- _todo_ refactor using t-attf-class -->
+                                    <t t-if="wc.working_state=='normal'">
+                                        <span class="btn btn-secondary btn-lg mb8">
+                                            <span style="opacity: 0.5;">[<t t-esc="wc.id"/>]</span>
+                                            <t t-esc="wc.name"/>
+                                            <t t-if="wc.code">
+                                                (<span style="font-weight: bold;"><t t-esc="wc.code"/></span>)
+                                            </t>
+                                            <span class="btn btn-info btn-lg mb8">
+                                                <t t-esc="wc.count_open_wo"/>
+                                                </span>
+                                            </span>
+                                        </t>
+                                    <t t-if="wc.working_state=='blocked'">
+                                        <span class="btn btn-danger btn-lg mb8">
+                                            <span style="opacity: 0.5;">[<t t-esc="wc.id"/>]</span>
+                                            <t t-esc="wc.name"/>
+                                            <t t-if="wc.code">
+                                                (<span style="font-weight: bold;"><t t-esc="wc.code"/></span>)
+                                            </t>
+                                            <span class="btn btn-info btn-lg mb8">
+                                                <t t-esc="wc.count_open_wo"/>
+                                                </span>
+                                            </span>
+                                        </t>
+                                    <t t-if="wc.working_state=='done'">
+                                        <span class="btn btn-success btn-lg mb8">
+                                            <span style="opacity: 0.5;">[<t t-esc="wc.id"/>]</span>
+                                            <t t-esc="wc.name"/>
+                                            <t t-if="wc.code">
+                                                (<span style="font-weight: bold;"><t t-esc="wc.code"/></span>)
+                                            </t>
+                                            <span class="btn btn-info btn-lg mb8">
+                                                <t t-esc="wc.count_open_wo"/>
+                                                </span>
+                                            </span>
+                                        </t>
+                                </a>
+                            </t>
+                            </div>
+                        </t>
+                    </div>
+                </div>
             </div>
         </t>
     </template>

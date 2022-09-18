@@ -6,43 +6,71 @@ import pytz
 
 class Main(http.Controller):
     @http.route(
-        "/mobile_mrp_working/wo/",
+        [
+            "/mes_wc_working/wo/<workorder_id>",
+            "/mes_wc_working/wo/",
+        ],
         type="http",
         csrf=False,
         auth="user",
-        website=True
+        website=True,
         )
-    def workorder(self, **post):
+    def workorder(self, workorder_id=None, **post):
         """
         _todo_
         shows wo details based on selection
-        @param btn : block|back|barcode|search
+        POST parameters:
+        @param action : block|back|openwo|search
         @param wc_id
-        @param barcode2
-        @param start_wo
-        @param search2
+        @param wo_id
+        @param start_wo : id of the wo to start
+        @param setup_wo : id of the wo to setup
+        @param widesearch
         """
+
         user_tz = request.env.user.tz or pytz.utc
         local = pytz.timezone(user_tz)
-        values = {}
-        workcenter_id = post.get("wc_id", False)
-        wc_id = int(workcenter_id)
+        action = post.get("action", False)
+        wc_id = int(post.get("wc_id", False))
         wc = request.env["mrp.workcenter"].browse(wc_id)
-        barcode2 = post.get("barcode2", False)
+        wo_id = post.get("wo_id", False)
+        view_wo = post.get("view_wo", False)
+        start_wo = post.get("start_wo", False)
+        setup_wo = post.get("setup_wo", False)
+        widesearch = post.get("widesearch", False)
+        values = {}
+        productivity = request.env["mrp.workcenter.productivity"]
+        date_start_ms = False
+
+        if post.get("btn", False) == "back":
+            # goes to main view
+            return http.local_redirect("/mes_wc_working")
+
+        if workorder_id:
+            view_wo = workorder_id
+            try:
+                wc = request.env["mrp.workorder"].browse(int(view_wo)).workcenter_id
+                wc_id = wc.id
+            except Exception:
+                wcs = request.env["mrp.workcenter"].search(
+                    [("count_open_wo", "!=", 0)],
+                    order="name",
+                    )
+                values = {
+                    "title": "Workorder loaded",
+                    "wcs": wcs,
+                    "error": _("ERROR: Workorder ID %d not found" % int(view_wo)),
+                    }
+                return request.render("mes_web_controller.workcenter_working", values)
 
         # manage options selected
-        if post.get("btn", False) == "back":
-            # goes to main page
-            return http.local_redirect("/mobile_mrp_working")
-        elif barcode2 or post.get("btn", False) == "barcode":
+        if wo_id or action == "openwo":
             # set active wo
-            wo_id = barcode2
-            values["action"] = "working"
-        elif post.get("btn", False) == "block":
+            values["loss_state_id"] = "working"
+        elif view_wo:
+            wo_id = view_wo
+        elif action == "block":
             # _???_ stop wo production
-            workcenter_id = post.get("wc_id", False)
-            wc_id = int(workcenter_id)
-            wc = request.env["mrp.workcenter"].browse(wc_id)
             alerts = request.env["mrp.workcenter.productivity.loss"].search(
                 [("loss_type", "=", "availability")],
                 limit=20,
@@ -52,38 +80,37 @@ class Main(http.Controller):
                 "title": "Mobile Alert",
                 "alerts": alerts,
                 "workcenter": wc,
-                "action": "block",
+                "loss_state_id": "stopped",
                 # "employee_ids": False _todo_ passare gli employee del productivity
                 # precedente?
                 }
             return request.render("mn_web_controller.alert_list", values)
-        elif post.get("start_wo", False):
+        elif start_wo:
             # set wo working status
-            wo_id = post.get("start_wo", False)
-            values["action"] = "working"
-        elif post.get("setup_wo", False):
+            wo_id = start_wo
+            values["loss_state_id"] = "working"
+        elif setup_wo:
             # set wo setup status
-            wo_id = post.get("setup_wo", False)
-            values["action"] = "setup"
-        elif post.get("btn", False) == "search" or post.get("search2", False):
+            wo_id = setup_wo
+            values["loss_state_id"] = "preparation"
+        elif action == "search" or widesearch:
             # _todo_
             wos = request.env["mrp.workorder"]
-            search2 = post.get("search2", False)
             domain = [
                 ("workcenter_id", "=", wc_id),
                 ("state", "not in", ["done", "cancel"]),
                 ]
-            if not search2:
+            if not widesearch:
                 wos = request.env["mrp.workorder"].search(
                     domain,
                     limit=200,
                     order="date_planned_start",
                     )
-            if search2:
+            if widesearch:
                 # search by plan
                 domain1 = domain.copy()
-                domain1.append(("plan_id", "ilike", search2))
-                values["search2"] = search2
+                domain1.append(("plan_id", "ilike", widesearch))
+                values["widesearch"] = widesearch
                 wos = request.env["mrp.workorder"].search(
                     domain1,
                     limit=200,
@@ -92,7 +119,7 @@ class Main(http.Controller):
                 if not wos:
                     # search by product
                     domain2 = domain.copy()
-                    domain2.append(("product_id", "ilike", search2))
+                    domain2.append(("product_id", "ilike", widesearch))
                     wos = request.env["mrp.workorder"].search(
                         domain2,
                         limit=200,
@@ -101,7 +128,7 @@ class Main(http.Controller):
                 if not wos:
                     # search by sale order
                     domain3 = domain.copy()
-                    domain3.append(("sale_id", "ilike", search2))
+                    domain3.append(("sale_id", "ilike", widesearch))
                     wos = request.env["mrp.workorder"].search(
                         domain3,
                         limit=200,
@@ -110,7 +137,7 @@ class Main(http.Controller):
                 if not wos:
                     # search by client sale order ref
                     domain4 = domain.copy()
-                    domain4.append(("sale_id.client_order_ref", "ilike", search2))
+                    domain4.append(("sale_id.client_order_ref", "ilike", widesearch))
                     wos = request.env["mrp.workorder"].search(
                         domain4,
                         limit=200,
@@ -119,7 +146,7 @@ class Main(http.Controller):
                 if not wos:
                     # search by production order
                     domain5 = domain.copy()
-                    domain5.append(("production_id", "ilike", search2))
+                    domain5.append(("production_id", "ilike", widesearch))
                     wos = request.env["mrp.workorder"].search(
                         domain5,
                         limit=200,
@@ -132,18 +159,20 @@ class Main(http.Controller):
                     "wos": wos,
                 }
                 )
-            return request.render("mn_web_controller.workorder_list", values)
+            return request.render("mes_web_controller.workorder_list", values)
         else:
             # goes to main page
-            return http.local_redirect("/mobile_mrp_working/")
+            return http.local_redirect(("/mes_wc_working/open_wos/%d" % wc_id))
 
         # serch wo
         try:
-            wo = request.env["mrp.workorder"].browse(int(wo_id))
+            wo = request.env["mrp.workorder"].search([
+                ('workcenter_id', '=', wc_id),
+                ('id', '=', int(wo_id))
+                ])
             if not wo.state or wo.state in ["done", "cancel"]:
                 raise Exception
-        except request.exceptions:
-            # _todo_ verificare se except request.exceptions: va bene
+        except Exception:
             wos = request.env["mrp.workorder"].search(
                 [
                     ("workcenter_id", "=", wc_id),
@@ -156,9 +185,10 @@ class Main(http.Controller):
                 "title": "Workorder for Workcenter",
                 "wc": wc,
                 "wos": wos,
-                "error": _("ERROR: Barcode not found"),
+                "error": _("ERROR: Workorder ID %d not found for this Workcenter"
+                           % int(wo_id)),
                 }
-            return request.render("mn_web_controller.workorder_list", values)
+            return request.render("mes_web_controller.workorder_list", values)
 
         # _todo_ descrivere condizione
         # _???_ use last employee productivity
@@ -169,30 +199,41 @@ class Main(http.Controller):
         employees = (
             request.env["mrp.workcenter.productivity"]
             .search([("workcenter_id", "=", wc.id)], order="date_start desc", limit=1)
-            .employee_ids.mapped("employee_id")
+            .employee_ids
             )
+
+        # show wo info
+        if view_wo:
+            productivity = request.env["mrp.workcenter.productivity"].search(
+                [
+                    ("workcenter_id", "=", wo.workcenter_id.id),
+                    ("workorder_id", "=", wo.id),
+                ],
+                limit=1,
+                order="id desc",
+                )
         # start wo production
-        wo.button_start()
-        productivity = request.env["mrp.workcenter.productivity"].search(
-            [
-                ("workcenter_id", "=", wo.workcenter_id.id),
-                ("workorder_id", "=", wo.id),
-                ("date_end", "=", False),
-            ],
-            limit=1,
-            order="id desc",
-            )
+        if start_wo:
+            wo.button_start()
+            productivity = request.env["mrp.workcenter.productivity"].search(
+                [
+                    ("workcenter_id", "=", wo.workcenter_id.id),
+                    ("workorder_id", "=", wo.id),
+                    ("date_end", "=", False),
+                ],
+                limit=1,
+                order="id desc",
+                )
+            time_start = productivity.date_start.astimezone(local)
+            date_start_ms = time_start.timestamp() * 1000  # value to pass to jquery
+
+        # _???_ verificare questa azione
         productivity.write(
             {
                 "employee_ids": [(0, 0, {"employee_id": e}) for e in employees.ids],
-                "action": values["action"],
-                # _todo_ aggiornare loss_id / loss_type
             }
             )
-
-        time_start = productivity.date_start.astimezone(local)
-        date_start_ms = time_start.timestamp() * 1000  # value to pass to jquery
         values["title"] = "Workorder for Workcenter"
         values["productivity"] = productivity
         values["data_start_msec"] = date_start_ms
-        return request.render("mn_web_controller.workorder_details", values)
+        return request.render("mes_web_controller.workorder_details", values)

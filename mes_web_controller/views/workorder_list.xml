@@ -2,87 +2,104 @@
 <odoo>
 
     <template id="workorder_list">
+        <link rel="stylesheet" href="/mes_web_controller/static/src/css/mes_controller.css"/>
         <t t-call="web.html_container">
-            <style>
-                h4 {
-                margin-bottom:initial;
-                }
-            </style>
             <t class="container">
-                <form action="/mobile_mrp_working/wo/" method="POST">
+                <form action="/mes_wc_working/wo/" method="POST">
                     <input name="csrf_token" type="hidden" t-att-value="request.csrf_token()"/>
                     <input name="wc_id" type="hidden" t-att-value="wc.id"/>
+
+                    <!-- main menu -->
                     <div class="row my-3">
-                        <div class="col-1 d-flex align-items-center" align="center">
-                            <button class="btn"
-                                    onclick="history.back()">
+                        <div class="col-2 d-flex align-items-center" align="center">
+                            <button name="btn"
+                                    class="btn cursor_evi"
+                                    type="submit"
+                                    style="background-color:blue; color:white;"
+                                    value="back"
+                                    >
                                 <span class="fa fa-arrow-left fa-2x"/>
+                                <br/>
+                                <span style="font-weight: bold; vertical-align: middle;">Workcenters</span>
                             </button>
                         </div>
-                        <div class="col-9 rounded d-flex align-items-center"
+                        <div class="col-5 rounded d-flex align-items-center"
                              style="background-color:LightGray;">
-                            <h4>Workcenter [<t t-esc="wc.code"/>]
+                            <span style="opacity: .5; font-size: .8em; position: absolute; top: 0px;">Workcenter [ID <t t-esc="wc.id"/>]</span>
+                            <h4>
                                 <t t-esc="wc.name"/>
+                                <t t-if="wc.code">
+                                    (<span style="font-weight: bold;"><t t-esc="wc.code"/></span>)
+                                </t>
                             </h4>
                         </div>
-                        <div class="col-1 d-flex align-items-center" align="center">
-                            <h4>Open
-                                <t t-esc="wc.count_open_wo"/>
-                            </h4>
+                        <div class="col-3 d-flex align-items-center" align="center">
+                            <button class="btn cursor_evi"
+                                    style="background-color:lightgreen; color:black;">
+                                <h4 style="width: 100%;" title="Click to update list">
+                                    <span style="font-size: .7em;">Workorders</span><br/>
+                                    <t t-esc="wc.count_open_wo"/>
+                                </h4>
+                            </button>
                         </div>
-                        <div class="col-1 d-flex align-items-center justify-content-end">
-                            <button name="btn"
+                        <div class="col-2 d-flex align-items-center justify-content-end">
+                            <button name="action"
                                     type="submit"
-                                    class="btn"
-                                    style="background-color:red;color:white;"
+                                    class="btn cursor_evi"
+                                    style="background-color:red; color:white;"
                                     value="block">
-                                <span class="fa fa-exclamation-triangle fa-2x"/>
+                                <span style="font-weight: bold; vertical-align: middle; font-size: 1.5em;">Stop</span>
+                                <span class="fa fa-exclamation-triangle fa-2x" style="vertical-align: middle;"/>
                             </button>
                         </div>
                     </div>
+
+                    <!-- search menu -->
                     <div class="row my-3">
                         <div class="col-5">
-                            <input name="barcode2"
+                            <input name="wo_id"
                                    type="text"
                                    class="form-control form-control-lg"
                                    autofocus="autofocus"
                                    autocomplete="off"
-                                   placeholder="Workorder id"/>
+                                   placeholder="Search Workorder id"/>
                         </div>
                         <div class="col-1">
-                            <button name="btn"
-                                    class="btn btn-secondary"
-                                    value="barcode">
+                            <button name="action"
+                                    class="btn btn-secondary cursor_evi"
+                                    value="openwo">
                                 <span class="fa fa-play fa-2x"/>
                             </button>
                         </div>
                         <div class="col-5">
-                            <input name="search2"
+                            <input name="widesearch"
                                    type="text"
                                    class="form-control form-control-lg"
                                    autocomplete="off"
-                                   t-att-value="search2"
-                                   placeholder="Search"/>
+                                   t-att-value="widesearch"
+                                   placeholder="Search on Workorder data"/>
                         </div>
                         <div class="col-1 d-flex align-items-center justify-content-end">
-                            <button name="btn"
-                                    class="btn btn-secondary"
+                            <button name="action"
+                                    class="btn btn-secondary cursor_evi"
                                     value="search">
                                 <span class="fa fa-search fa-2x"/>
                             </button>
                         </div>
                     </div>
+
+                    <!-- error message -->
                     <t t-if="error">
                         <div class="alert alert-danger" role="alert">
                             <t t-esc="error"/>
                         </div>
                     </t>
+
+                    <!-- workorder list -->
                     <div class="row my-3">
                         <div class="col-12">
                             <table class="table">
                                 <thead>
-                                    <th>Start</th>
-                                    <th>Setup</th>
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>Code</th>
@@ -91,28 +108,13 @@
                                     <th>Done</th>
                                     <th>Time</th>
                                     <th>MO</th>
+                                    <th>View</th>
+                                    <th>Start</th>
+                                    <th>Setup</th>
                                 </thead>
                                 <tbody>
                                     <t t-foreach="wos" t-as="wo">
-                                        <tr>
-                                            <td>
-                                                <button name="start_wo"
-                                                        type="submit"
-                                                        class="btn"
-                                                        style="background-color:green;color:white;"
-                                                        t-att-value="wo.id">
-                                                    <span class="fa fa-play fa-2x"/>
-                                                </button>
-                                            </td>
-                                            <td>
-                                                <button name="setup_wo"
-                                                        type="submit"
-                                                        class="btn"
-                                                        style="background-color:orange;color:white;"
-                                                        t-att-value="wo.id">
-                                                    <span class="fa fa-wrench fa-2x"/>
-                                                </button>
-                                            </td>
+                                        <tr class="hover_evi">
                                             <td>
                                                 <span t-esc="wo.id"/>
                                             </td>
@@ -138,6 +140,33 @@
                                             </td>
                                             <td>
                                                 <span t-esc="wo.production_id.name"/>
+                                            </td>
+                                            <td>
+                                                <button name="view_wo"
+                                                        type="submit"
+                                                        class="btn cursor_evi"
+                                                        style="background-color:gray; color:white;"
+                                                        t-att-value="wo.id">
+                                                    <span class="fa fa-search fa-2x"/>
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <button name="start_wo"
+                                                        type="submit"
+                                                        class="btn cursor_evi"
+                                                        style="background-color:green;color:white;"
+                                                        t-att-value="wo.id">
+                                                    <span class="fa fa-play fa-2x"/>
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <button name="setup_wo"
+                                                        type="submit"
+                                                        class="btn cursor_evi"
+                                                        style="background-color:orange;color:white;"
+                                                        t-att-value="wo.id">
+                                                    <span class="fa fa-wrench fa-2x"/>
+                                                </button>
                                             </td>
                                         </tr>
                                     </t>
