@@ -42,7 +42,9 @@ class Main(http.Controller):
         productivity = request.env["mrp.workcenter.productivity"]
         date_start_ms = False
 
-        if post.get("btn", False) == "back":
+        if post.get("action", False) == "back" \
+           and (not wo_id or wo_id == "") \
+           and (not widesearch or widesearch == ""):
             # goes to main view
             return http.local_redirect("/mes_wc_working")
 

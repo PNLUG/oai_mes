@@ -16,13 +16,21 @@ class Main(http.Controller):
         """
         _todo_
         @param productivity_id :
-        @param btn : back|employee|block|record_production|record_setup
+        @param action : back|employee|block|record_production|record_setup
         @param pcs_ok :
         @param pcs_ko :
         """
         user_tz = request.env.user.tz or pytz.utc
         local = pytz.timezone(user_tz)
         productivity_id = post.get("productivity_id", False)
+
+        if post.get("action", False) == "wc_list":
+            return http.local_redirect("/mes_wc_working")
+
+        if post.get("action", False) == "workcenter":
+            return http.local_redirect(
+                "/mes_wc_working/open_wos/%s" % post.get("wc_id", False)
+                )
 
         # check if productivity exsists
         try:
@@ -37,11 +45,7 @@ class Main(http.Controller):
         wc_id = wo.workcenter_id.id
         wc = request.env["mrp.workcenter"].browse(int(wc_id))
 
-        if post.get("btn", False) == "back":
-            # goes to main view
-            return http.local_redirect("/mes_wc_working")
-
-        if post.get("btn", False) == "employees":
+        if post.get("action", False) == "employees":
             # open employee view
             values = {
                 "title": "Employees",
@@ -50,7 +54,7 @@ class Main(http.Controller):
             }
             return request.render("mn_web_controller.employee_list", values)
 
-        if post.get("btn", False) == "block":
+        if post.get("action", False) == "block":
             # open loss view
             alerts = request.env["mrp.workcenter.productivity.loss"].search(
                 [
@@ -68,7 +72,7 @@ class Main(http.Controller):
                 }
             return request.render("mn_web_controller.alert_list", values)
 
-        if post.get("btn", False) == "record_production":
+        if post.get("action", False) == "record_production":
             # records production
             if not productivity.employee_ids:
                 # goes back to wo if no employee declared
@@ -79,10 +83,9 @@ class Main(http.Controller):
                     "productivity": productivity,
                     "workcenter": wc,
                     "wo": productivity.workorder_id,
-                    "action": productivity.action,
                     "data_start_msec": date_start_ms,
                     }
-                return request.render("mn_web_controller.workorder_details", values)
+                return request.render("mes_web_controller.workorder_details", values)
 
             # _todo_ aggiungere scarti? -> inserire campo su mrp.productivity e
             # modificare funzione end_previous
@@ -113,7 +116,7 @@ class Main(http.Controller):
             # show wo list
             return http.local_redirect("/mobile_mrp_working/open_wos/" + str(wc_id))
 
-        if post.get("btn", False) == "record_setup":
+        if post.get("action", False) == "record_setup":
             if not productivity.employee_ids:
                 # goes back to wo if no employee declared
                 time_start = productivity.date_start.astimezone(local)
@@ -123,7 +126,6 @@ class Main(http.Controller):
                     "productivity": productivity,
                     "workcenter": wc,
                     "wo": productivity.workorder_id,
-                    "action": productivity.action,
                     "data_start_msec": date_start_ms,
                     }
                 # show wo details

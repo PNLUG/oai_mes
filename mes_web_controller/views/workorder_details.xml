@@ -7,37 +7,33 @@
         <link rel="stylesheet" href="/mes_web_controller/static/src/css/mes_controller.css"/>
         <t t-call="web.html_container">
             <t class="container">
-                <t>vista workorder_details</t>
+                <t>_!!!_ vista workorder_details</t>
                 <form action="/mes_wc_working/done/" method="POST">
                     <input name="csrf_token" type="hidden" t-att-value="request.csrf_token()"/>
                     <input name="wc_id" type="hidden" t-att-value="workcenter.id"/>
                     <input name="productivity_id" type="hidden" t-att-value="productivity.id"/>
                     <div class="row my-3">
-                        <div class="col-2 d-flex align-items-center" align="center">
-                            <button name="btn"
+
+                        <div class="col-4 d-flex align-items-left" align="left">
+                            <button name="action"
                                     class="btn cursor_evi"
                                     type="submit"
-                                    style="background-color:blue; color:white;"
-                                    value="back"
+                                    style="background-color:lightgray; color:black; text-align: left;"
+                                    value="workcenter"
                                     >
-                                <span class="fa fa-arrow-left fa-2x"/>
-                                <br/>
-                                <span style="font-weight: bold; vertical-align: middle;">Workcenters</span>
+                                <span style="opacity: .5; font-size: .8em;">
+                                    <span class="fa fa-arrow-left fa-2x"
+                                    /> Workcenter [ID <t t-esc="wo.workcenter_id.id"/>]
+                                    </span>
+                                <h4>
+                                    <t t-esc="wo.workcenter_id.name"/>
+                                    <t t-if="wo.workcenter_id.code">
+                                        (<span style="font-weight: bold;"><t t-esc="wo.workcenter_id.code"/></span>)
+                                    </t>
+                                </h4>
                             </button>
                         </div>
-                        <div class="col-4 rounded d-flex align-items-center"
-                             style="background-color:LightGray;">
-                            <span style="opacity: .5; font-size: .8em; position: absolute; top: 0px;">
-                                Workcenter [ID <t t-esc="wo.workcenter_id.id"/>]
-                                </span>
-                            <h4>
-                                <t t-esc="wo.workcenter_id.name"/>
-                                <t t-if="wo.workcenter_id.code">
-                                    (<span style="font-weight: bold;"><t t-esc="wo.workcenter_id.code"/></span>)
-                                </t>
-                            </h4>
-                        </div>
-                        <div class="col-2 rounded d-flex align-items-center"
+                        <div class="col-1 rounded d-flex align-items-center"
                              style="background-color:lightgreen; color:black;">
                             <span style="opacity: .5; font-size: .8em; position: absolute; top: 0px;">
                                 Workorder
@@ -46,7 +42,8 @@
                                 ID <t t-esc="wo.id"/>
                             </h4>
                         </div>
-                        <div class="col-2 d-flex align-items-center">
+                        <div class="col-3 align-items-center">
+                            <t>Elapsed time</t><br/>
                             <t t-if="data_start_msec">
                                 <h4 id="timer" t-att-data-value="data_start_msec"/>
                                 </t>
@@ -64,6 +61,16 @@
                                 <span class="fa fa-exclamation-triangle fa-2x" style="vertical-align: middle;"/>
                             </button>
                         </div>
+                        <div class="col-2 d-flex align-items-center" align="center">
+                            <button name="action"
+                                    class="btn cursor_evi"
+                                    type="submit"
+                                    style="background-color:blue; color:white;"
+                                    value="wc_list"
+                                    >
+                                <span style="font-weight: bold; vertical-align: middle;">Workcenters<br/>list</span>
+                            </button>
+                        </div>
                     </div>
 
                     <div class="row my-3">
@@ -75,7 +82,7 @@
                             </div>
                         </t>
                         <div class="col-1 d-flex align-items-center justify-content-end">
-                            <button name="btn"
+                            <button name="action"
                                     type="submit"
                                     class="btn btn-primary fa fa-users fa-2x"
                                     value="employees"/>
@@ -271,7 +278,7 @@
                             </div>
                             <div class="row">
                                 <div class="col d-flex align-items-center">
-                                    <button name="btn"
+                                    <button name="action"
                                             type="submit"
                                             class="btn my-3 btn-lg btn-block btn-success"
                                             value="record_production"
@@ -287,7 +294,7 @@
                         <div id="controls">
                             <div class="row">
                                 <div class="col d-flex align-items-center">
-                                    <button name="btn"
+                                    <button name="action"
                                             type="submit"
                                             class="btn my-3 btn-lg btn-block btn-warning"
                                             value="record_setup"
@@ -318,11 +325,12 @@
         </t>
         <script>
         <!-- _todo_ trovare come eseguirlo su onready della pagina-->
-            $("#qty_ok_plus").onclick = qty_ok_plus;
-            $("#qty_ok_minus").onclick = qty_ok_minus;
-            $("#qty_ko_plus").onclick = qty_ko_plus;
-            $("#qty_ko_minus").onclick = qty_ko_minus;
-
+            setTimeout(function(){
+                $("#qty_ok_plus").click(qty_ok_plus);
+                $("#qty_ok_minus").click(qty_ok_minus);
+                $("#qty_ko_plus").click(qty_ko_plus);
+                $("#qty_ko_minus").click(qty_ko_minus);
+                }, 100)
             myTimer()
             var myVar = setInterval(myTimer, 1000);
         </script>

@@ -16,7 +16,7 @@ function msToTime(s) {
 
 function myTimer() {
     var now = new Date();
-    if($("#timer").data('value').trim() != ''){
+    if($("#timer").data('value').toString().trim() != ''){
         var start = new Date(parseInt($("#timer").data('value')));
         t = now-start;
         $("#timer").html(msToTime(t));
