@@ -20,7 +20,6 @@ class Main(http.Controller):
             order="name",
             )
         values = {
-            "title": "Workcenter loaded",
             "wcs": wcs,
             }
         return request.render("mes_web_controller.workcenter_working", values)

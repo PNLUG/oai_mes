@@ -86,7 +86,7 @@ class Main(http.Controller):
                 # "employee_ids": False _todo_ passare gli employee del productivity
                 # precedente?
                 }
-            return request.render("mn_web_controller.alert_list", values)
+            return request.render("mes_web_controller.workorder_alert", values)
         elif start_wo:
             # set wo working status
             wo_id = start_wo

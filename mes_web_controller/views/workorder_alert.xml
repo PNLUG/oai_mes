@@ -1,34 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- _todo_ cambiare nome alert_list -->
-    <template id="alert_list">
+    <!-- _todo_ cambiare nome workorder_alert -->
+    <template id="workorder_alert">
         <script type="text/javascript" src="/mes_web_controller/static/src/js/mes_web_controller.js"></script>
         <link rel="stylesheet" href="/mes_web_controller/static/src/css/mes_controller.css"/>
         <t t-call="web.html_container">
             <div class="container">
-                <t>_!!!_ vista alert_list</t>
+                <t>_!!!_ vista workorder_alert</t>
                 <form action="/mes_wc_working/alert/" method="POST">
                     <input name="csrf_token" type="hidden" t-att-value="request.csrf_token()"/>
                     <input name="workcenter_id" type="hidden" t-att-value="workcenter.id"/>
                     <input name="productivity_id" type="hidden" t-if="productivity" t-att-value="productivity.id"/>
+
+                    <!-- header -->
                     <div class="row my-3">
-                        <div class="col-9 d-flex align-items-center" style="background-color:LightGray;">
-                            <h4>Workcenter [<t t-esc="workcenter.code"/>]
-                                <t t-esc="workcenter.name"/>
-                            </h4>
+                        <div class="col-4 d-flex align-items-left" align="left">
+                            <button name="action"
+                                    class="btn cursor_evi"
+                                    type="submit"
+                                    style="background-color:lightgray; color:black; text-align: left;"
+                                    value="workcenter"
+                                    >
+                                <span style="opacity: .7; font-size: .8em;">
+                                    <span class="fa fa-arrow-left fa-2x"
+                                    /> Workcenter [ID <t t-esc="workcenter.id"/>]
+                                    </span>
+                                <h4>
+                                    <t t-esc="workcenter.name"/>
+                                    <t t-if="workcenter.code">
+                                        (<span style="font-weight: bold;"><t t-esc="workcenter.code"/></span>)
+                                    </t>
+                                </h4>
+                            </button>
                         </div>
-                        <div class="col-2 d-flex align-items-center">
+                        <div class="col-2 rounded d-flex align-items-center"
+                             style="background-color:lightgreen; color:black;">
+                            <button name="action"
+                                    class="btn">
+                                <span style="opacity: .7; font-size: .8em;">
+                                    Workorder [ID <t t-esc="wo.id"/>]
+                                    </span>
+                                <h4>
+                                    <t t-esc="wo.name"/>
+                                </h4>
+                            </button>
+                        </div>
+                        <div class="col-2 align-items-center">
+                            <t>Elapsed time</t><br/>
                             <t t-if="data_start_msec">
                                 <h4 id="timer" t-att-data-value="data_start_msec"/>
-                            </t>
+                                </t>
+                            <t t-if="not data_start_msec">
+                                <h4 id="timer" data-value=""/>
+                                </t>
                         </div>
-
-                        <div class="col-1">
-                            <div name="alert_wo"
-                                 class="btn"
-                                 style="background-color:red;color:white;">
-                                <span class="fa fa-exclamation-triangle fa-2x"/>
-                            </div>
+                        <div class="col-2 d-flex align-items-center justify-content-end">
+                            <button name="action"
+                                    type="submit"
+                                    class="btn cursor_evi"
+                                    style="background-color:red; color:white;"
+                                    value="block">
+                                <span style="font-weight: bold; vertical-align: middle; font-size: 1.5em;">Stop</span>
+                                <span class="fa fa-exclamation-triangle fa-2x" style="vertical-align: middle;"/>
+                            </button>
+                        </div>
+                        <div class="col-2 d-flex align-items-center" align="center">
+                            <button name="action"
+                                    class="btn cursor_evi"
+                                    type="submit"
+                                    style="background-color:blue; color:white;"
+                                    value="wc_list"
+                                    >
+                                <span style="font-weight: bold; vertical-align: middle;">Workcenters<br/>list</span>
+                            </button>
                         </div>
                     </div>
 

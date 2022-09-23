@@ -24,7 +24,7 @@
         "views/workcenter_working.xml",
         "views/workorder_list.xml",
         "views/workorder_details.xml",
-        "views/alert_list.xml",
+        "views/workorder_alert.xml",
         "views/employee_list.xml",
         ],
     "application": False,

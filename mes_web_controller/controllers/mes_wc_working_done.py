@@ -52,7 +52,7 @@ class Main(http.Controller):
                 "productivity_id": productivity_id,
                 "employees": productivity.employee_ids,
             }
-            return request.render("mn_web_controller.employee_list", values)
+            return request.render("mes_web_controller.employee_list", values)
 
         if post.get("action", False) == "block":
             # open loss view
@@ -70,7 +70,7 @@ class Main(http.Controller):
                 "workcenter": wc,
                 "employee_ids": productivity.employee_ids,
                 }
-            return request.render("mn_web_controller.alert_list", values)
+            return request.render("mes_web_controller.workorder_alert", values)
 
         if post.get("action", False) == "record_production":
             # records production
@@ -129,7 +129,7 @@ class Main(http.Controller):
                     "data_start_msec": date_start_ms,
                     }
                 # show wo details
-                return request.render("mn_web_controller.workorder_details", values)
+                return request.render("mes_web_controller.workorder_details", values)
 
             # _???_ che fa?
             wo.end_previous()

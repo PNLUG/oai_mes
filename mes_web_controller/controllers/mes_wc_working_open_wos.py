@@ -12,7 +12,7 @@ class Main(http.Controller):
         @param wc : workcenter
         """
         # _todo_ decidere come gestire il caso di gerarchia wc con presenza di parent_id
-        # se c'è un parent_id non vengono caricati ordini sul wc?
+        # _???_ se c'è un parent_id non vengono caricati ordini sul wc?
         orders = request.env["mrp.workorder"].search(
             [
                 ("workcenter_id", "=", wc.id),
@@ -38,8 +38,8 @@ class Main(http.Controller):
         """
         _todo_
         POST params
-        @param view_wc : id of the workcenter
-        @param view_wo : id of the workorder
+        @param view_wc : id of the workcenter to show
+        @param view_wo : id of the workorder to show
         """
 
         # _todo_ cambiare nome variabile barcode
@@ -56,7 +56,7 @@ class Main(http.Controller):
 
         try:
             wc_id = int(view_wc) if view_wc else workcenter_id
-            wc = request.env["mrp.workcenter"].browse(wc_id)
+            wc = request.env["mrp.workcenter"].search([('id', '=', wc_id)])
             if not wc:
                 # _todo_ sistemare messaggio
                 raise Exception
@@ -64,7 +64,6 @@ class Main(http.Controller):
             wos = self.wc_order(wc)
 
             values = {
-                "title": "Workorder of the Workcenter",
                 "wc": wc,
                 "wos": wos,
                 }
@@ -78,20 +77,18 @@ class Main(http.Controller):
             if productivity.id:
                 # show productivity data
                 time_start = productivity.date_start.astimezone(local)
-                date_start_ms = time_start.timestamp() * 1000  # value to pass to jquery
+                date_start_ms = time_start.timestamp() * 1000
 
                 if not productivity.loss_id.manual:
-                    # if production isn't stoped (loss_id.manual=true) show wo details
-                    values.update(
-                        {
-                            "title": "Workorder of the Workcenter",
-                            "productivity": productivity,
-                            "workcenter": wc,
-                            "wo": productivity.workorder_id,
-                            "state": productivity.loss_id.loss_state,
-                            "data_start_msec": date_start_ms,
-                            }
-                        )
+                    # if production isn't stopped (loss_id.manual=false) show wo details
+                    values.update({
+                        "productivity": productivity,
+                        "workcenter": wc,
+                        "wo": productivity.workorder_id,
+                        "state": productivity.loss_id.loss_state,
+                        "data_start_msec": date_start_ms,
+                        "employee_ids": productivity.employee_ids,
+                        })
                     return request.render(
                         "mes_web_controller.workorder_details",
                         values
@@ -101,11 +98,13 @@ class Main(http.Controller):
                     values = {
                         "productivity": productivity,
                         "workcenter": wc,
+                        "wo": productivity.workorder_id,
+                        "state": productivity.loss_id.loss_state,
                         "data_start_msec": date_start_ms,
                         "employee_ids": productivity.employee_ids,
                         }
                     return request.render(
-                            "mes_web_controller.alert_list",
+                            "mes_web_controller.workorder_alert",
                             values
                             )
             else:
@@ -115,12 +114,14 @@ class Main(http.Controller):
                     values
                     )
         except Exception:
-            # pop wrong workcenter_id message and show wc list
-            wcs = request.env["mrp.workcenter"].search([])
+            # show wc list and wrong workcenter_id message
+            wcs = request.env["mrp.workcenter"].search(
+                [("count_open_wo", "!=", 0)],
+                order="name",
+                )
             values = {
-                "title": "Workorder of the Workcenter",
                 "wcs": wcs,
-                "error": _("ERROR: Workcenter ID %s not found" % workcenter_id),
+                "error": _("Error: Workcenter ID %s not found" % wc_id),
                 }
             return request.render(
                 "mes_web_controller.workcenter_working",

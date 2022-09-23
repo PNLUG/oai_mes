@@ -75,7 +75,7 @@ class Main(http.Controller):
                     "workcenter": wc,
                     "error": _("Loss reference not found (code error)"),
                     }
-                return request.render("mes_web_controller.alert_list", values)
+                return request.render("mes_web_controller.workorder_alert", values)
 
         if loss_id:
             # record productivity loss
@@ -103,7 +103,7 @@ class Main(http.Controller):
                 "data_start_msec": date_start_ms,
                 "employee_ids": productivity.employee_ids,
                 }
-            return request.render("mes_web_controller.alert_list", values)
+            return request.render("mes_web_controller.workorder_alert", values)
         else:
             # show wo list
             wc.unblock()

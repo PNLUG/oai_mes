@@ -12,8 +12,9 @@
                     <input name="csrf_token" type="hidden" t-att-value="request.csrf_token()"/>
                     <input name="wc_id" type="hidden" t-att-value="workcenter.id"/>
                     <input name="productivity_id" type="hidden" t-att-value="productivity.id"/>
+                    STATUS <t t-esc="state"/>
+                    <!-- header -->
                     <div class="row my-3">
-
                         <div class="col-4 d-flex align-items-left" align="left">
                             <button name="action"
                                     class="btn cursor_evi"
@@ -21,7 +22,7 @@
                                     style="background-color:lightgray; color:black; text-align: left;"
                                     value="workcenter"
                                     >
-                                <span style="opacity: .5; font-size: .8em;">
+                                <span style="opacity: .7; font-size: .8em;">
                                     <span class="fa fa-arrow-left fa-2x"
                                     /> Workcenter [ID <t t-esc="wo.workcenter_id.id"/>]
                                     </span>
@@ -33,16 +34,19 @@
                                 </h4>
                             </button>
                         </div>
-                        <div class="col-1 rounded d-flex align-items-center"
+                        <div class="col-2 rounded d-flex align-items-center"
                              style="background-color:lightgreen; color:black;">
-                            <span style="opacity: .5; font-size: .8em; position: absolute; top: 0px;">
-                                Workorder
-                                </span>
-                            <h4>
-                                ID <t t-esc="wo.id"/>
-                            </h4>
+                            <button name="action"
+                                    class="btn">
+                                <span style="opacity: .7; font-size: .8em;">
+                                    Workorder [ID <t t-esc="wo.id"/>]
+                                    </span>
+                                <h4>
+                                    <t t-esc="wo.name"/>
+                                </h4>
+                            </button>
                         </div>
-                        <div class="col-3 align-items-center">
+                        <div class="col-2 align-items-center">
                             <t>Elapsed time</t><br/>
                             <t t-if="data_start_msec">
                                 <h4 id="timer" t-att-data-value="data_start_msec"/>
@@ -73,37 +77,26 @@
                         </div>
                     </div>
 
-                    <div class="row my-3">
-                        <t t-foreach="productivity.employee_ids" t-as="employee">
-                            <div class="bg-primary rounded col d-flex align-items-center mx-1">
-                                <h4>
-                                    <t t-esc="employee.employee_id.name"/>
-                                </h4>
-                            </div>
-                        </t>
-                        <div class="col-1 d-flex align-items-center justify-content-end">
-                            <button name="action"
-                                    type="submit"
-                                    class="btn btn-primary fa fa-users fa-2x"
-                                    value="employees"/>
-                        </div>
-                    </div>
-
+                    <!-- wo status -->
                     <t t-if="state=='working'">
                         <div class="row my-3">
                             <div class="col-1 d-flex align-items-center">
-                                <div name="start_wo2"
+                                <div name="setup_wo2"
                                      class="btn"
-                                     style="background-color:green; color:white;">
+                                     style="background-color: rgb(40, 167, 69); color:white;">
                                     <span class="fa fa-play fa-2x"/>
                                 </div>
                             </div>
                             <div class="col-6 rounded d-flex align-items-center"
-                                 style="background-color:green">
-                                <h4>Working</h4>&#160;
-                                <span style="font-weight: bold;"><t t-esc="wo.name"/></span>&#160;
-                                [<t>ID</t> <t t-esc="wo.id"/>]
+                                 style="background-color: rgb(40, 167, 69);">
+                                <h4>Working</h4>
                             </div>
+                        </div>
+                    </t>
+
+                    <t t-if="error">
+                        <div class="alert alert-danger" role="alert">
+                            <t t-esc="error"/>
                         </div>
                     </t>
 
@@ -118,18 +111,16 @@
                             </div>
                             <div class="col-6 rounded d-flex align-items-center"
                                  style="background-color:orange">
-                                <h4>Working</h4>&#160;
-                                <span style="font-weight: bold;"><t t-esc="wo.name"/></span>&#160;
-                                [<t>ID</t> <t t-esc="wo.id"/>]
+                                <h4>Set-Up</h4>
                             </div>
                         </div>
                     </t>
-
+                    <!-- wo data -->
                     <div class="row my-3">
                         <div class="col-9">
                             <div class="row">
                                 <div class="col-3" style="font-weight:strong;">
-                                    <span style="font-weight:strong;">Manuf.Order</span>
+                                    <span style="font-weight:strong;">Manuf. Order</span>
                                 </div>
                                 <div class="col">
                                     <t t-esc="wo.production_id.name"/>
@@ -186,7 +177,7 @@
                             <div class="row">
                                 <div class="col-3"
                                      style="font-weight:strong;">
-                                    <span style="font-weight:strong;">Quantity to Do</span>
+                                    <span style="font-weight:strong;">Quantity to do</span>
                                 </div>
                                 <div class="col">
                                     <t t-esc="int(wo.qty_production)"/>
@@ -195,10 +186,19 @@
                             <div class="row">
                                 <div class="col-3"
                                      style="font-weight:strong;">
-                                    <span style="font-weight:strong;">Quantity Done</span>
+                                    <span style="font-weight:strong;">Quantity done</span>
                                 </div>
                                 <div class="col">
                                     <t t-esc="int(wo.qty_produced)"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3"
+                                     style="font-weight:strong;">
+                                    <span style="font-weight:strong;">Quantity remaining</span>
+                                </div>
+                                <div class="col">
+                                    <span t-esc="int(wo.qty_production) - int(wo.qty_produced)"/>
                                 </div>
                             </div>
                         </div>
@@ -209,40 +209,57 @@
                                      alt="Product"/>
                         </div>
                     </div>
+
                     <div class="row my-3 rounded"
                          style="background-color:LightGray;color:black">
                         <div class="col">
                             <t t-esc="wo.product_id.description"/>
                         </div>
                     </div>
-                    <t t-if="error">
-                        <div class="alert alert-danger" role="alert">
-                            <t t-esc="error"/>
+
+                    <!-- employee -->
+                    <t t-if="state=='preparation' or state=='working'">
+                        <div class="row my-3">
+                            <t t-foreach="productivity.employee_ids" t-as="employee">
+                                <div class="bg-primary rounded col d-flex align-items-center mx-1">
+                                    <h4>
+                                        <t t-esc="employee.employee_id.name"/>
+                                    </h4>
+                                </div>
+                            </t>
+                            <div class="col-1 d-flex align-items-center justify-content-end">
+                                <button name="action"
+                                        type="submit"
+                                        class="btn btn-primary fa fa-users fa-2x"
+                                        value="employees"/>
+                            </div>
                         </div>
                     </t>
 
+                    <!-- production declaration -->
                     <t t-if="state=='working'">
                         <div id="controls">
                             <div class="row">
-                                <div class="col-3">
-                                    Quantity Producing (<span t-esc="int(wo.qty_production) - int(wo.qty_produced)"/>)
+                                <div class="col-3" style="text-align: right;">
+                                    Quantity produced
                                 </div>
                                 <div class="col-3">
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
-                                            <button id="qty_ok_minus"
+                                            <button id="qty_prd_minus"
                                                     type="button"
                                                     class="btn btn-lg btn-outline-success fa fa-minus"
                                                     />
                                         </div>
-                                        <input id="qty_ok"
+                                        <input id="qty_prd"
                                                name="pcs_ok"
                                                type="number"
                                                class="form-control form-control-lg"
+                                               size="2"
                                                autofocus="autofocus"
                                                autocomplete="off"/>
                                         <div class="input-group-append">
-                                            <button id="qty_ok_plus"
+                                            <button id="qty_prd_plus"
                                                     type="button"
                                                     class="btn btn-lg btn-outline-success fa fa-plus"
                                                     />
@@ -250,25 +267,26 @@
                                     </div>
                                 </div>
 
-                                <div class="col-3">
-                                    Quantity Scraps
+                                <div class="col-3" style="text-align: right;">
+                                    Quantity scraped
                                 </div>
                                 <div class="col-3">
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
-                                            <button id="qty_ko_minus"
+                                            <button id="qty_scr_minus"
                                                     type="button"
                                                     class="btn btn-lg btn-outline-danger fa fa-minus"
                                                     />
                                         </div>
-                                        <input id="qty_ko"
+                                        <input id="qty_scr"
                                                name="pcs_ko"
                                                type="number"
                                                class="form-control form-control-lg"
+                                               size="2"
                                                autofocus="autofocus"
                                                autocomplete="off"/>
                                         <div class="input-group-append">
-                                            <button id="qty_ko_plus"
+                                            <button id="qty_scr_plus"
                                                     type="button"
                                                     class="btn btn-lg btn-outline-danger fa fa-plus"
                                                     />
@@ -290,6 +308,7 @@
                         </div>
                     </t>
 
+                    <!-- complete setup -->
                     <t t-if="state=='preparation'">
                         <div id="controls">
                             <div class="row">
@@ -324,15 +343,42 @@
             </t>
         </t>
         <script>
-        <!-- _todo_ trovare come eseguirlo su onready della pagina-->
-            setTimeout(function(){
-                $("#qty_ok_plus").click(qty_ok_plus);
-                $("#qty_ok_minus").click(qty_ok_minus);
-                $("#qty_ko_plus").click(qty_ko_plus);
-                $("#qty_ko_minus").click(qty_ko_minus);
-                }, 100)
-            myTimer()
-            var myVar = setInterval(myTimer, 1000);
+            $(window).ready(function(){
+                $("#qty_prd_plus").click(
+                    {   id_act: 'qty_prd_plus',
+                        id_val: 'qty_prd',
+                        val : 1,
+                        act_mode: 'add'
+                        },
+                    value_change
+                    );
+                $("#qty_prd_minus").click(
+                    {   id_act: 'qty_prd_plus',
+                        id_val: 'qty_prd',
+                        val : -1,
+                         act_mode: 'add'
+                         },
+                    value_change
+                    );
+                $("#qty_scr_plus").click(
+                    {   id_act: 'qty_scr_plus',
+                        id_val: 'qty_scr',
+                        val : 1,
+                        act_mode: 'add'
+                        },
+                    value_change
+                    );
+                $("#qty_scr_minus").click(
+                    {   id_act: 'qty_scr_plus',
+                        id_val: 'qty_scr',
+                        val : -1,
+                         act_mode: 'add'
+                         },
+                    value_change
+                    );
+                });
+            myTimer();
+            var myVar = setInterval(myTimer(), 1000);
         </script>
     </template>
 

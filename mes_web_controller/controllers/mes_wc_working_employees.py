@@ -47,7 +47,7 @@ class Main(http.Controller):
                 "employee_ids": productivity.employee_ids,
                 }
             if productivity.action == "block":
-                return request.render("mes_web_controller.alert_list", values)
+                return request.render("mes_web_controller.workorder_alert", values)
             else:
                 return request.render("mes_web_controller.workorder_details", values)
 
