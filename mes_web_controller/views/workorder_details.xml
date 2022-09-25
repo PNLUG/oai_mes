@@ -3,16 +3,16 @@
 
     <template id="workorder_details">
         <script type="text/javascript" src="/mes_web_controller/static/src/js/mes_web_controller.js"></script>
-        <script type="text/javascript" src="/mes_web_controller/static/src/js/workorder_details.js"></script>
-        <link rel="stylesheet" href="/mes_web_controller/static/src/css/mes_controller.css"/>
+        <link rel="stylesheet" href="/mes_web_controller/static/src/css/mes_web_controller.css"/>
         <t t-call="web.html_container">
             <t class="container">
-                <t>_!!!_ vista workorder_details</t>
                 <form action="/mes_wc_working/done/" method="POST">
                     <input name="csrf_token" type="hidden" t-att-value="request.csrf_token()"/>
                     <input name="wc_id" type="hidden" t-att-value="workcenter.id"/>
                     <input name="productivity_id" type="hidden" t-att-value="productivity.id"/>
-                    STATUS <t t-esc="state"/>
+                    _!!!_ vista workorder_details
+                    _!!!_ STATUS <t t-esc="state"/>
+
                     <!-- header -->
                     <div class="row my-3">
                         <div class="col-4 d-flex align-items-left" align="left">
@@ -52,7 +52,7 @@
                                 <h4 id="timer" t-att-data-value="data_start_msec"/>
                                 </t>
                             <t t-if="not data_start_msec">
-                                <h4 id="timer" data-value=""/>
+                                <h4 id="timer" data-value=""><t t-esc="website.secs_to_hrs(wo.duration)"/></h4>
                                 </t>
                         </div>
                         <div class="col-2 d-flex align-items-center justify-content-end">
@@ -77,7 +77,14 @@
                         </div>
                     </div>
 
-                    <!-- wo status -->
+                    <!-- wo status and error -->
+
+                    <t t-if="error">
+                        <div class="alert alert-danger" role="alert">
+                            <t t-esc="error"/>
+                        </div>
+                    </t>
+
                     <t t-if="state=='working'">
                         <div class="row my-3">
                             <div class="col-1 d-flex align-items-center">
@@ -91,12 +98,6 @@
                                  style="background-color: rgb(40, 167, 69);">
                                 <h4>Working</h4>
                             </div>
-                        </div>
-                    </t>
-
-                    <t t-if="error">
-                        <div class="alert alert-danger" role="alert">
-                            <t t-esc="error"/>
                         </div>
                     </t>
 
@@ -115,6 +116,7 @@
                             </div>
                         </div>
                     </t>
+
                     <!-- wo data -->
                     <div class="row my-3">
                         <div class="col-9">
@@ -213,7 +215,7 @@
                     <div class="row my-3 rounded"
                          style="background-color:LightGray;color:black">
                         <div class="col">
-                            <t t-esc="wo.product_id.description"/>
+                            <t>Internal notes:</t> <t t-esc="wo.product_id.description"/>
                         </div>
                     </div>
 
@@ -345,40 +347,40 @@
         <script>
             $(window).ready(function(){
                 $("#qty_prd_plus").click(
-                    {   id_act: 'qty_prd_plus',
-                        id_val: 'qty_prd',
-                        val : 1,
+                    {   id_val: 'qty_prd',
+                        change : 1,
+                        val_min : 0,
                         act_mode: 'add'
                         },
                     value_change
                     );
                 $("#qty_prd_minus").click(
-                    {   id_act: 'qty_prd_plus',
-                        id_val: 'qty_prd',
-                        val : -1,
-                         act_mode: 'add'
-                         },
+                    {   id_val: 'qty_prd',
+                        change : -1,
+                        val_min : 0,
+                        act_mode: 'add'
+                        },
                     value_change
                     );
                 $("#qty_scr_plus").click(
-                    {   id_act: 'qty_scr_plus',
-                        id_val: 'qty_scr',
-                        val : 1,
+                    {   id_val: 'qty_scr',
+                        change : 1,
+                        val_min : 0,
                         act_mode: 'add'
                         },
                     value_change
                     );
                 $("#qty_scr_minus").click(
-                    {   id_act: 'qty_scr_plus',
-                        id_val: 'qty_scr',
-                        val : -1,
-                         act_mode: 'add'
-                         },
+                    {   id_val: 'qty_scr',
+                        change : -1,
+                        val_min : 0,
+                        act_mode: 'add'
+                        },
                     value_change
                     );
+                myTimer({id: 'timer'})
+                var myVar = setInterval(function(){myTimer({id: 'timer'});}, 1000);
                 });
-            myTimer();
-            var myVar = setInterval(myTimer(), 1000);
         </script>
     </template>
 

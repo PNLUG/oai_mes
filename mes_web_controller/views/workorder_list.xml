@@ -2,7 +2,7 @@
 <odoo>
 
     <template id="workorder_list">
-        <link rel="stylesheet" href="/mes_web_controller/static/src/css/mes_controller.css"/>
+        <link rel="stylesheet" href="/mes_web_controller/static/src/css/mes_web_controller.css"/>
         <t t-call="web.html_container">
             <t class="container">
                 <t>_!!!_ vista workorder_list</t>
@@ -57,7 +57,7 @@
                     <!-- search menu -->
                     <div class="row my-3">
                         <div class="col-5">
-                            <input name="wo_id"
+                            <input name="search_wo"
                                    type="text"
                                    class="form-control form-control-lg"
                                    autofocus="autofocus"
@@ -67,7 +67,7 @@
                         <div class="col-1">
                             <button name="action"
                                     class="btn btn-secondary cursor_evi"
-                                    value="openwo">
+                                    value="search_wo">
                                 <span class="fa fa-play fa-2x"/>
                             </button>
                         </div>
@@ -82,7 +82,7 @@
                         <div class="col-1 d-flex align-items-center justify-content-end">
                             <button name="action"
                                     class="btn btn-secondary cursor_evi"
-                                    value="search">
+                                    value="search_wide">
                                 <span class="fa fa-search fa-2x"/>
                             </button>
                         </div>

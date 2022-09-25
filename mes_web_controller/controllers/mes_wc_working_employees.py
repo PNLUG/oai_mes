@@ -20,7 +20,7 @@ class Main(http.Controller):
         @param btn : back|add
         @param delete : employee_id to delete
         """
-        user_tz = request.env.user.tz or pytz.utc
+        user_tz = request.env.user.tz or str(pytz.utc.zone)
         local = pytz.timezone(user_tz)
         productivity_id = post.get("productivity_id", False)
 
@@ -64,9 +64,7 @@ class Main(http.Controller):
                         ):
                             values["error"] = _("User already present")
                         else:
-                            productivity.write(
-                                #{"employee_ids": [(0, 0, {"employee_id": employee_id})]}
-                                {"employee_ids": employee_id}
+                            productivity.write({"employee_ids": employee_id}
                             )
                     else:
                         values["error"] = _("Employee id not found (barcode error)")

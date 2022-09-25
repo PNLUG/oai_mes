@@ -3,7 +3,7 @@
     <!-- _todo_ cambiare nome workorder_alert -->
     <template id="workorder_alert">
         <script type="text/javascript" src="/mes_web_controller/static/src/js/mes_web_controller.js"></script>
-        <link rel="stylesheet" href="/mes_web_controller/static/src/css/mes_controller.css"/>
+        <link rel="stylesheet" href="/mes_web_controller/static/src/css/mes_web_controller.css"/>
         <t t-call="web.html_container">
             <div class="container">
                 <t>_!!!_ vista workorder_alert</t>
@@ -35,8 +35,7 @@
                         </div>
                         <div class="col-2 rounded d-flex align-items-center"
                              style="background-color:lightgreen; color:black;">
-                            <button name="action"
-                                    class="btn">
+                            <button class="btn">
                                 <span style="opacity: .7; font-size: .8em;">
                                     Workorder [ID <t t-esc="wo.id"/>]
                                     </span>
@@ -78,6 +77,7 @@
 
                     <!-- Sblocca -->
                     <t t-if="productivity">
+                        <t>_!!!_ sezione productivity</t>
                         <div class="row my-3">
                             <t t-foreach="employee_ids" t-as="employee">
                                 <div class="bg-primary rounded col d-flex align-items-center mx-1">
@@ -87,7 +87,7 @@
                                 </div>
                             </t>
                             <div class="col-1 d-flex align-items-center justify-content-end">
-                                <button name="btn"
+                                <button name="action"
                                         type="submit"
                                         class="btn btn-primary fa fa-users fa-2x"
                                         value="employees"
@@ -96,9 +96,10 @@
                         </div>
                         <div class="row my-3">
                             <div class="col-1 d-flex align-items-center">
-                                <div name="alert_wo"
+                                <div name="action"
                                      class="btn"
-                                     style="background-color:red;color:white;">
+                                     style="background-color:red;color:white;"
+                                     value="alert_wo">
                                     <span class="fa fa-exclamation-triangle fa-2x"/>
                                 </div>
                             </div>
@@ -113,22 +114,29 @@
                         </div>
                         <div class="row my-3">
                             <div class="col">
-                                <button name="unblock"
+                                <button name="action"
                                         type="submit"
                                         class="btn btn-lg btn-block btn-danger"
-                                        value="1">
+                                        value="unblock">
                                     Unblock
                                 </button>
                             </div>
                         </div>
                     </t>
                     <!-- Blocca -->
-                    <t t-if="not productivity">
+                    <t t-if=" productivity">
+                        <t>_!!!_ sezione NON productivity</t>
+                        <t t-if="error">
+                            <div class="alert alert-danger" role="alert">
+                                <t t-esc="error"/>
+                            </div>
+                        </t>
                         <div class="row my-3 justify-content-between">
                             <div class="col-1 d-flex align-items-center">
-                                <div name="alert_wo"
+                                <div name="action"
                                      class="btn"
-                                     style="background-color:red;color:white;">
+                                     style="background-color:red;color:white;"
+                                     value="alert_wo">
                                     <span class="fa fa-exclamation-triangle fa-2x"/>
                                 </div>
                             </div>
@@ -143,7 +151,7 @@
                         </div>
                         <div class="row my-3">
                             <div class="col">
-                                <input name="barcode3"
+                                <input name="alert_id"
                                        type="text"
                                        class="form-control form-control-lg"
                                        autofocus="autofocus"
@@ -151,11 +159,7 @@
                                        placeholder="Alert id"/>
                             </div>
                         </div>
-                        <t t-if="error">
-                            <div class="alert alert-danger" role="alert">
-                                <t t-esc="error"/>
-                            </div>
-                        </t>
+                        <t>_!!!_ sezione pulsanti alert</t>
                         <div class="row my-3">
                             <div class="col">
                                 <t t-foreach="alerts" t-as="alert">
@@ -176,9 +180,10 @@
             </div>
         </t>
          <script>
-            <!-- _todo_ trovare come eseguirlo su onready della pagina-->
-            myTimer()
-            var myVar = setInterval(myTimer, 1000);
+            $(window).ready(function(){
+                myTimer({id: 'timer'})
+                var myVar = setInterval(function(){myTimer({id: 'timer'});}, 1000);
+                });
         </script>
     </template>
 

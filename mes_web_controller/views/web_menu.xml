@@ -3,7 +3,7 @@
 
     <template id="web_menu_template" inherit_id="web_menu.web_menu_template" name="Menu">
         <xpath expr="." position="inside">
-            <link rel="stylesheet" href="/mes_web_controller/static/src/css/mes_controller.css"/>
+            <link rel="stylesheet" href="/mes_web_controller/static/src/css/mes_web_controller.css"/>
         </xpath>
         <xpath expr="//div[@id='sample_route']" position="attributes">
             <attribute name="hidden">hidden</attribute>

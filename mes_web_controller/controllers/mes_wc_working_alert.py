@@ -15,14 +15,18 @@ class Main(http.Controller):
     def alert(self, **post):
         """
         _todo_
-        @param loss_id :
-        @param barcode3 : loss_id
-        @param workcenter_id :
-        @param productivity_id :
-        @param btn :
+        POST parameters
+        @param workcenter_id : id of the wc to extract
+        @param productivity_id : id of the active productivity record _???_ giusto ?
+        @param action : workcenter|block|wc_list|employees|alert_wo|unblock
+        @param alert_id :
+        @param loss_id : id of the loss type to set
         """
-        # _todo_ manage error if
-        user_tz = request.env.user.tz or pytz.utc
+
+        # _todo_P_ manage error if
+
+        action = post.get("action", False)
+        user_tz = request.env.user.tz or str(pytz.utc.zone)
         local = pytz.timezone(user_tz)
         loss_id = post.get("loss_id", False)
         if loss_id:
@@ -30,12 +34,17 @@ class Main(http.Controller):
         barcode = post.get("barcode3", False)
         wc_id = post.get("workcenter_id", False)
 
+        if action == "wc_list":
+            return http.local_redirect("/mes_wc_working")
+        if action == "workcenter":
+            return http.local_redirect("/mes_wc_working/open_wos/%s" % wc_id)
+
         if wc_id:
             wc = request.env["mrp.workcenter"].browse(int(wc_id))
         else:
             return http.local_redirect("/mes_wc_working")
 
-        if post.get("btn", False) == "employees":
+        if post.get("alert", False) == "employees":
             # show employee list
             productivity_id = post.get("productivity_id", False)
             productivity = request.env["mrp.workcenter.productivity"].browse(

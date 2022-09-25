@@ -43,10 +43,11 @@ class Main(http.Controller):
         """
 
         # _todo_ cambiare nome variabile barcode
-        user_tz = request.env.user.tz or pytz.utc
+        user_tz = request.env.user.tz or str(pytz.utc.zone)
         local = pytz.timezone(user_tz)
         view_wc = post.get("view_wc", False)
         view_wo = post.get("view_wo", False)
+        wc_id = False
 
         if view_wo:
             # redirect to wo details
@@ -73,7 +74,7 @@ class Main(http.Controller):
                 order="date_start desc",
                 limit=1,
                 )
-            # _todo_ gestire se ci sono più productivity
+            # _todo_P_ gestire se ci sono più productivity
             if productivity.id:
                 # show productivity data
                 time_start = productivity.date_start.astimezone(local)

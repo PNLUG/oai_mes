@@ -87,11 +87,11 @@ class Main(http.Controller):
                     }
                 return request.render("mes_web_controller.workorder_details", values)
 
-            # _todo_ aggiungere scarti? -> inserire campo su mrp.productivity e
+            # _todo_P_ aggiungere scarti? -> inserire campo su mrp.productivity e
             # modificare funzione end_previous
-            # _todo_ aggiungere il campo su qt productivity? Il campo produced su wo
+            # _todo_P_ aggiungere il campo su qt productivity? Il campo produced su wo
             # sarebbe meglio computed rispetto productivity
-            # _todo_ prevedere come aggiornare qt su parametro su funzione
+            # _todo_P_ prevedere come aggiornare qt su parametro su funzione
             # endprevious(doall=True)
 
             # update pcs of productivity
@@ -133,6 +133,6 @@ class Main(http.Controller):
 
             # _???_ che fa?
             wo.end_previous()
-            # _todo_ implementare oggetto productivity con cambio causale
+            # _todo_P_ implementare oggetto productivity con cambio causale
             # show wo list
             return http.local_redirect("/mobile_mrp_working/open_wos/" + str(wc_id))
