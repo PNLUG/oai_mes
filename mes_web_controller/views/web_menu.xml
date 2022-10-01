@@ -10,9 +10,9 @@
         </xpath>
         <xpath expr="//div[@id='sample_route']" position="after">
             <hr/>
-            <div id="mes_wc_working" class="row justify-content-center">
-                <a href="/mes_wc_working" class="btn btn-danger btn-lg btn-block mb8"
-                    >Workcenter with Workorder</a>
+            <div id="mes_dep_working" class="row justify-content-center">
+                <a href="/mes_dep_working" class="btn btn-danger btn-lg btn-block mb8"
+                    >Production Departments</a>
             </div>
         </xpath>
     </template>

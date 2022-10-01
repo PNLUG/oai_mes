@@ -33,9 +33,10 @@ class Main(http.Controller):
             loss_id = int(loss_id)
         barcode = post.get("barcode3", False)
         wc_id = post.get("workcenter_id", False)
+        wc = request.env["mrp.workcenter"].browse(int(wc_id ))
 
         if action == "wc_list":
-            return http.local_redirect("/mes_wc_working")
+            return http.local_redirect("/mes_wc_working/%s" % wc.department_id.id)
         if action == "workcenter":
             return http.local_redirect("/mes_wc_working/open_wos/%s" % wc_id)
 

@@ -8,18 +8,21 @@
                 <t>_!!!_ vista workcenter_working</t>
                 <div class="row justify-content-center my-3">
                     <div class="col-3 d-flex align-items-left" align="left">
-                        <a href="/menu" class="btn btn-primary btn-lg btn-block mb8"
-                            >Menu</a>
+                        <a href="/mes_dep_working" class="btn btn-primary btn-lg btn-block mb8"
+                            >Departments</a>
                     </div>
                     <div class="col-6 d-flex align-items-center" align="center">
                         <div style="width: 100%; text-align: center !important;">
-                            <h4>
+                            <h3>
+                                 <t t-esc="dep.name"/>
+                            </h3>
+                            <h6>
                                 <t>Workcenter with open Workorder</t>
-                            </h4>
+                            </h6>
                         </div>
                     </div>
                     <div class="col-3 d-flex align-items-left" align="left">
-                        <a href="/mes_wc_working" class="btn btn-primary btn-lg btn-block mb8"
+                        <a t-attf-href="/mes_wc_working/{{dep.id}}" class="btn btn-primary btn-lg btn-block mb8"
                             >Update</a>
                     </div>
                 </div>

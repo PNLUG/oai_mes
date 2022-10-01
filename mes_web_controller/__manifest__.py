@@ -22,6 +22,7 @@
     "data": [
         "views/web_menu.xml",
         "views/workcenter_working.xml",
+        "views/department_working.xml",
         "views/workorder_list.xml",
         "views/workorder_details.xml",
         "views/workorder_alert.xml",

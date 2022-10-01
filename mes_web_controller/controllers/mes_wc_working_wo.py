@@ -44,16 +44,19 @@ class Main(http.Controller):
         productivity = request.env["mrp.workcenter.productivity"]
         date_start_ms = ''
 
+        if view_wo:
+            workorder_id = int(view_wo)
+
         if action == "back" \
            and (not search_wo or search_wo == "") \
            and (not search_wide or search_wide == ""):
             # goes to main view
-            return http.local_redirect("/mes_wc_working")
+            return http.local_redirect("/mes_wc_working/%s" % wc.department_id.id)
 
         if workorder_id:
             # check wo id and set related wc
             try:
-                wo_id = workorder_id
+                wo_id = int(workorder_id)
                 wc = request.env["mrp.workorder"].browse(wo_id).workcenter_id
                 wc_id = wc.id
             except Exception:
@@ -63,7 +66,7 @@ class Main(http.Controller):
                     )
                 values = {
                     "wcs": wcs,
-                    "error": _("Error: Workorder ID %d not found" % workorder_id),
+                    "error": _("Error: Workorder ID %d not found" % int(workorder_id)),
                     }
                 return request.render("mes_web_controller.workcenter_working", values)
 

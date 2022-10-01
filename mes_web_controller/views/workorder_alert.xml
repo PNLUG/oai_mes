@@ -14,7 +14,7 @@
 
                     <!-- header -->
                     <div class="row my-3">
-                        <div class="col-4 d-flex align-items-left" align="left">
+                        <div class="col-10 d-flex align-items-left" align="left">
                             <button name="action"
                                     class="btn cursor_evi"
                                     type="submit"
@@ -33,7 +33,19 @@
                                 </h4>
                             </button>
                         </div>
-                        <div class="col-2 rounded d-flex align-items-center"
+                        <div class="col-2 d-flex align-items-center" align="center">
+                            <button name="action"
+                                    class="btn cursor_evi"
+                                    type="submit"
+                                    style="background-color:blue; color:white;"
+                                    value="wc_list"
+                                    >
+                                <span style="font-weight: bold; vertical-align: middle;">Workcenters<br/>list</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row my-3">
+                        <div class="col-8 rounded d-flex align-items-center"
                              style="background-color:lightgreen; color:black;">
                             <button class="btn">
                                 <span style="opacity: .7; font-size: .8em;">
@@ -63,18 +75,7 @@
                                 <span class="fa fa-exclamation-triangle fa-2x" style="vertical-align: middle;"/>
                             </button>
                         </div>
-                        <div class="col-2 d-flex align-items-center" align="center">
-                            <button name="action"
-                                    class="btn cursor_evi"
-                                    type="submit"
-                                    style="background-color:blue; color:white;"
-                                    value="wc_list"
-                                    >
-                                <span style="font-weight: bold; vertical-align: middle;">Workcenters<br/>list</span>
-                            </button>
-                        </div>
                     </div>
-
                     <!-- Sblocca -->
                     <t t-if="productivity">
                         <t>_!!!_ sezione productivity</t>

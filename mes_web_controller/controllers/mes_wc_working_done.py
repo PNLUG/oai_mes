@@ -22,10 +22,11 @@ class Main(http.Controller):
         """
         user_tz = request.env.user.tz or pytz.utc
         local = pytz.timezone(user_tz)
+        wc = request.env["mrp.workcenter"].browse(int(post.get("wc_id", False)))
         productivity_id = post.get("productivity_id", False)
 
         if post.get("action", False) == "wc_list":
-            return http.local_redirect("/mes_wc_working")
+            return http.local_redirect("/mes_wc_working/%s" % wc.department_id.id)
 
         if post.get("action", False) == "workcenter":
             return http.local_redirect(

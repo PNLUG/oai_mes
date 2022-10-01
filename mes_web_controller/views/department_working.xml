@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="department_working">
+        <link rel="stylesheet" href="/mes_web_controller/static/src/css/mes_web_controller.css"/>
+        <t t-call="web.html_container">
+            <div class="container">
+                <t>_!!!_ vista department_working</t>
+                <div class="row justify-content-center my-3">
+                    <div class="col-3 d-flex align-items-left" align="left">
+                        <a href="/menu" class="btn btn-primary btn-lg btn-block mb8"
+                            >Menu</a>
+                    </div>
+                    <div class="col-6 d-flex align-items-center" align="center">
+                        <div style="width: 100%; text-align: center !important;">
+                            <h4>
+                                <t>Departments with open Workorders</t>
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="col-3 d-flex align-items-left" align="left">
+                        <a href="/mes_dep_working" class="btn btn-primary btn-lg btn-block mb8"
+                            >Update</a>
+                    </div>
+                </div>
+                <form action="/mes_wc_working/open_wos/" method="POST">
+                    <input name="csrf_token" type="hidden" t-att-value="request.csrf_token()"/>
+                    <div class="row justify-content-center my-3">
+                        <div class="col-4 d-flex align-items-right" align="right">
+                            <input id="view_wc"
+                                   name="view_wc"
+                                   type="text"
+                                   class="form-control form-control-lg"
+                                   autofocus="autofocus"
+                                   onfocus="$('#view_wo').val('');"
+                                   autocomplete="off"
+                                   placeholder="Search Workcenter id"/>
+                        </div>
+                        <div class="col-4 d-flex align-items-right" align="right">
+                            <input id="view_wo"
+                                   name="view_wo"
+                                   type="text"
+                                   class="form-control form-control-lg"
+                                   onfocus="$('#view_wc').val('');"
+                                   autocomplete="off"
+                                   placeholder="Search Workorder id"/>
+                        </div>
+                        <button type="submit" hidden="hidden">
+                            <!-- used to activate form on enter -->
+                            </button>
+                    </div>
+                </form>
+                <t t-if="error">
+                    <div class="alert alert-danger" role="alert">
+                        <t t-esc="error"/>
+                    </div>
+                </t>
+                <div class="row my-3">
+                    <div class="col">
+                        <t t-foreach="dprtmts" t-as="dprtmt">
+                            <div>
+                                <a t-attf-href="/mes_wc_working/{{dprtmt.id}}">
+                                    <span class="btn btn-secondary btn-lg mb8">
+                                        <span style="opacity: 0.5;">[<t t-esc="dprtmt.id"/>]</span>
+                                        <t t-esc="dprtmt.name"/>
+                                    </span>
+                                </a>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>
