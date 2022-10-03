@@ -18,6 +18,8 @@
 
         # CUSTOM
         "web_menu",
+        "mes_workcenter_department",
+        "mes_workcenter_load",
         ],
     "data": [
         "views/web_menu.xml",
