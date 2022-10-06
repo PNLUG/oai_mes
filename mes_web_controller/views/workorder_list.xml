@@ -99,14 +99,14 @@
                     <div class="row my-3">
                         <div class="col-12">
                             <table class="table">
-                                <thead>
+                                <thead style="vertical-align: middle;">
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>Code</th>
-                                    <th>Date</th>
-                                    <th>Todo</th>
-                                    <th>Done</th>
-                                    <th>Time</th>
+                                    <th>Start date</th>
+                                    <th>Order pcs</th>
+                                    <th>Done pcs</th>
+                                    <th>Standard time<br/><l style="color: blue;">Effective time</l></th>
                                     <th>MO</th>
                                     <th>Info</th>
                                     <th>Start</th>
@@ -128,7 +128,6 @@
                                                 <t t-if="wo.date_planned_start">
                                                     <span t-esc="website.local_time(wo.date_planned_start).strftime('%d/%m/%Y %H:%M')"/>
                                                 </t>
-                                            </td>
                                             <td>
                                                 <span t-esc="int(wo.production_id.product_qty)"/>
                                             </td>
@@ -137,6 +136,9 @@
                                             </td>
                                             <td>
                                                 <span t-esc="website.secs_to_hrs(wo.duration_expected)"/>
+                                                <br/>
+                                                <l style="color: blue;">_todo_ tempo effettivo</l>
+                                            </td>
                                             </td>
                                             <td>
                                                 <span t-esc="wo.production_id.name"/>

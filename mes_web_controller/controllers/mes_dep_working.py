@@ -21,6 +21,13 @@ class Main(http.Controller):
             ],
             order="name",
             )
+
+        for dep in dprtmts:
+            wcs = request.env["mrp.workcenter"].search([
+                ("count_open_wo", "!=", 0),
+                ("department_id", "=", dep.id),
+                ])
+            dep.open_wo = sum(wc.count_open_wo for wc in wcs)
         values = {
             "dprtmts": dprtmts,
             }

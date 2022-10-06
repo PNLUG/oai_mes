@@ -29,6 +29,7 @@
         "views/workorder_details.xml",
         "views/workorder_alert.xml",
         "views/employee_list.xml",
+        "views/wo_open.xml",
         ],
     "application": False,
     "installable": True,

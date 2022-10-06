@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <template id="department_working">
+    <template id="wo_open">
         <link rel="stylesheet" href="/mes_web_controller/static/src/css/mes_web_controller.css"/>
         <t t-call="web.html_container">
             <div class="container">
-                <t>_!!!_ vista department_working</t>
+                <t>_!!!_ vista wo_open</t>
                 <div class="row justify-content-center my-3">
                     <div class="col-3 d-flex align-items-left" align="left">
-                        <a href="/menu" class="btn btn-primary btn-lg btn-block mb8"
-                            >Menu</a>
+                        <a href="/mes_dep_working" class="btn btn-primary btn-lg btn-block mb8"
+                            >Departments</a>
                     </div>
                     <div class="col-6 d-flex align-items-center" align="center">
                         <div style="width: 100%; text-align: center !important;">
                             <h4>
-                                <t>Departments with open Workorders</t>
+                                <t>Open Workorders on dep.</t> <b><t t-esc="department.name"/></b>
                             </h4>
                         </div>
                     </div>
                     <div class="col-3 d-flex align-items-left" align="left">
-                        <a href="/mes_dep_working" class="btn btn-primary btn-lg btn-block mb8"
+                        <a t-attf-href="/mes_wo_open/{{department.id}}" class="btn btn-primary btn-lg btn-block mb8"
                             >Update</a>
                     </div>
                 </div>
@@ -57,35 +57,18 @@
                 </t>
                 <div class="row my-3">
                     <div class="col">
-                    <table>
-                        <t t-foreach="dprtmts" t-as="dprtmt">
-                            <tr>
-                            <td>
-                                <span style="opacity: 0.5;">[<t t-esc="dprtmt.id"/>]</span>
-                                <t t-esc="dprtmt.name"/>
-                            </td>
-                            <td>
-                                <span class="btn btn-info btn-lg mb8">
-                                    <t t-esc="dprtmt.open_wo"/>
-                                </span>
-                            </td>
-                            <td>
-                                <a t-attf-href="/mes_wc_working/{{dprtmt.id}}">
+                        <t t-foreach="wos_open" t-as="wo">
+                            <div>
+                                <a t-attf-href="/mes_wc_working/{{wo.id}}">
                                     <span class="btn btn-info btn-lg mb8">
-                                        Workcenters
+                                        <span style="opacity: 0.5;">[<t t-esc="wo.id"/>]</span>
+                                        <t t-esc="wo.name"/>
+                                        <t t-esc="wo.product_id.name"/>
+                                        [<t t-esc="wo.date_planned_start" t-options='{"widget": "date","format": "dd-MM-yy"}'/>]
                                     </span>
                                 </a>
-                            </td>
-                            <td>
-                                <a t-attf-href="/mes_wo_open/{{dprtmt.id}}">
-                                    <span class="btn btn-info btn-lg mb8">
-                                        Workorder
-                                    </span>
-                                </a>
-                            </td>
-                            </tr>
+                            </div>
                         </t>
-                        </table>
                     </div>
                 </div>
             </div>

@@ -241,8 +241,9 @@ class Main(http.Controller):
                 # _todo_P_ aggiornare loss_id / loss_type
                 })
 
-        time_start = productivity.date_start.astimezone(local)
-        date_start_ms = time_start.timestamp() * 1000
+        time_start = productivity.date_start.astimezone(local) if \
+            productivity.date_start else False
+        date_start_ms = time_start.timestamp() * 1000 if time_start else 0
         values["productivity"] = productivity
 
         return request.render("mes_web_controller.workorder_details", values)
