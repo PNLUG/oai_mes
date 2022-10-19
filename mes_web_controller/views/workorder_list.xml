@@ -72,11 +72,11 @@
                             </button>
                         </div>
                         <div class="col-5">
-                            <input name="widesearch"
+                            <input name="search_wide"
                                    type="text"
                                    class="form-control form-control-lg"
                                    autocomplete="off"
-                                   t-att-value="widesearch"
+                                   t-att-value="search_wide"
                                    placeholder="Search on Workorder data"/>
                         </div>
                         <div class="col-1 d-flex align-items-center justify-content-end">

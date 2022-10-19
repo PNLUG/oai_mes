@@ -28,8 +28,10 @@
                 </div>
                 <form action="/mes_wc_working/open_wos/" method="POST">
                     <input name="csrf_token" type="hidden" t-att-value="request.csrf_token()"/>
+                    <input name="dep_id" type="hidden" t-att-value="dep.id"/>
+                    <input name="view_type" type="hidden" value="workcenter"/>
                     <div class="row justify-content-center my-3">
-                        <div class="col-4 d-flex align-items-right" align="right">
+                        <div class="col-3 d-flex align-items-right" align="right">
                             <input id="view_wc"
                                    name="view_wc"
                                    type="text"
@@ -39,7 +41,12 @@
                                    autocomplete="off"
                                    placeholder="Search Workcenter id"/>
                         </div>
-                        <div class="col-4 d-flex align-items-right" align="right">
+                        <div class="col-5 d-flex align-items-right" align="right">
+                            <a t-attf-href="/mes_wo_open/{{dep.id}}">
+                                <span class="btn btn-info btn-lg mb8">
+                                    Workorder
+                                </span>
+                            </a>
                             <input id="view_wo"
                                    name="view_wo"
                                    type="text"

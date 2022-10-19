@@ -42,16 +42,43 @@ class Main(http.Controller):
         @param view_wo : id of the workorder to show
         """
 
-        # _todo_ cambiare nome variabile barcode
+        # utility
         user_tz = request.env.user.tz or str(pytz.utc.zone)
         local = pytz.timezone(user_tz)
-        view_wc = post.get("view_wc", False)
-        view_wo = post.get("view_wo", False)
         wc_id = False
+        # original department id of the request
+        dep_id = post.get("dep_id", False)
+        # serached wc id
+        view_wc = post.get("view_wc", False)
+        # searched wo id
+        view_wo = post.get("view_wo", False)
+        # original view of the request: workorder|workcenter|None
+        view_type = post.get("view_type", False)
 
         if view_wo:
-            # redirect to wo details
-            return http.local_redirect("/mes_wc_working/wo/%s" % view_wo)
+            wo = request.env["mrp.workorder"].search([('id', '=', view_wo)])
+            if not wo and dep_id and int(dep_id) > 0:
+                request.session.update(
+                    {'error':
+                     ("Error: Workorder ID %s not found in this Department" % view_wo)
+                     })
+                if view_type == 'workorder':
+                    # redirect to wo list
+                    return http.local_redirect("/mes_wo_open/%s" % int(dep_id))
+                else:
+                    # redirect to wc list
+                    return http.local_redirect("/mes_wc_working/%s" % int(dep_id))
+            elif not wo and dep_id:
+                # redirect to dep list
+                request.session.update(
+                    {'error':
+                     ("Error: Workorder ID %s not found" % view_wo)
+                     })
+                return http.local_redirect("/mes_dep_working/")
+            else:
+                # redirect to wo details
+                request.session.update({'dep_id': dep_id})
+                return http.local_redirect("/mes_wc_working/wo/%s" % view_wo)
 
         workcenter_id = int(workcenter_id) if workcenter_id else False
 
@@ -116,15 +143,38 @@ class Main(http.Controller):
                     )
         except Exception:
             # show wc list and wrong workcenter_id message
-            wcs = request.env["mrp.workcenter"].search(
-                [("count_open_wo", "!=", 0)],
-                order="name",
-                )
-            values = {
-                "wcs": wcs,
-                "error": _("Error: Workcenter ID %s not found" % wc_id),
-                }
-            return request.render(
-                "mes_web_controller.workcenter_working",
-                values
-                )
+            if view_wc and dep_id:
+                if int(dep_id) > 0:
+                    if request.session['error']:
+                        request.session.update({
+                            'error': _("Error: Workcenter ID %s not found " +
+                                       "in this Department") % wc_id
+                            })
+                    else:
+                        request.session['error'] = \
+                            _("Error: Workcenter ID %s not found " +
+                              "in this Department") % wc_id
+                    if view_type == 'workorder':
+                        # redirect to wo list
+                        return http.local_redirect("/mes_wo_open/%s" % int(dep_id))
+                    else:
+                        # redirect to wc list
+                        return http.local_redirect("/mes_wc_working/%s" % int(dep_id))
+                else:
+                    request.session.update({
+                        'error': _("Error: Workcenter ID %s not found" % wc_id)
+                        })
+                    return http.local_redirect("/mes_dep_working/")
+            else:
+                wcs = request.env["mrp.workcenter"].search(
+                    [("count_open_wo", "!=", 0)],
+                    order="name",
+                    )
+                values = {
+                    "wcs": wcs,
+                    "error": _("Error: Workcenter ID %s not found" % wc_id),
+                    }
+                return request.render(
+                    "mes_web_controller.workcenter_working",
+                    values
+                    )

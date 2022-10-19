@@ -13,9 +13,12 @@
                     </div>
                     <div class="col-6 d-flex align-items-center" align="center">
                         <div style="width: 100%; text-align: center !important;">
-                            <h4>
-                                <t>Open Workorders on dep.</t> <b><t t-esc="department.name"/></b>
-                            </h4>
+                            <h3>
+                                 <t t-esc="department.name"/>
+                            </h3>
+                            <h6>
+                                <t>Open Workorders</t>
+                            </h6>
                         </div>
                     </div>
                     <div class="col-3 d-flex align-items-left" align="left">
@@ -25,8 +28,15 @@
                 </div>
                 <form action="/mes_wc_working/open_wos/" method="POST">
                     <input name="csrf_token" type="hidden" t-att-value="request.csrf_token()"/>
+                    <input name="dep_id" type="hidden" t-att-value="department.id"/>
+                    <input name="view_type" type="hidden" value="workorder"/>
                     <div class="row justify-content-center my-3">
-                        <div class="col-4 d-flex align-items-right" align="right">
+                        <div class="col-5 d-flex align-items-right" align="right">
+                            <a t-attf-href="/mes_wc_working/{{department.id}}">
+                                <span class="btn btn-secondary btn-lg mb8">
+                                    Workcenters
+                                </span>
+                            </a>
                             <input id="view_wc"
                                    name="view_wc"
                                    type="text"
@@ -36,7 +46,7 @@
                                    autocomplete="off"
                                    placeholder="Search Workcenter id"/>
                         </div>
-                        <div class="col-4 d-flex align-items-right" align="right">
+                        <div class="col-3 d-flex align-items-right" align="right">
                             <input id="view_wo"
                                    name="view_wo"
                                    type="text"
@@ -57,18 +67,56 @@
                 </t>
                 <div class="row my-3">
                     <div class="col">
-                        <t t-foreach="wos_open" t-as="wo">
-                            <div>
-                                <a t-attf-href="/mes_wc_working/{{wo.id}}">
-                                    <span class="btn btn-info btn-lg mb8">
-                                        <span style="opacity: 0.5;">[<t t-esc="wo.id"/>]</span>
-                                        <t t-esc="wo.name"/>
+                        <table>
+                            <tr style="text-align: center;">
+                                <td>Planned start</td>
+                                <td>Workorder [<span style="opacity: 0.5;">[ID]</span></td>
+                                <td>Product</td>
+                                <td>Workcenter</td>
+                            </tr>
+                            <t t-foreach="wos_open" t-as="wo">
+                                <tr>
+                                    <td style="text-align: center;">
+                                        <t t-esc="wo.date_planned_start" t-options='{"widget": "date","format": "dd-MM-yy"}'/>
+                                    </td>
+                                    <td>
+                                        <a t-attf-href="/mes_wc_working/wo/{{wo.id}}">
+                                            <span class="btn btn-info btn-lg mb8" style="width: 100%;">
+                                                <t t-esc="wo.name"/>
+                                                <span style="opacity: 0.5;">[<t t-esc="wo.id"/>]</span>
+                                            </span>
+                                        </a>
+                                    </td>
+                                    <td>
                                         <t t-esc="wo.product_id.name"/>
-                                        [<t t-esc="wo.date_planned_start" t-options='{"widget": "date","format": "dd-MM-yy"}'/>]
-                                    </span>
-                                </a>
-                            </div>
-                        </t>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <!-- _todo_ refactor using t-attf-class -->
+                                        <t t-if="wo.workcenter_id.working_state=='normal'">
+                                            <a t-attf-href="/mes_wc_working/open_wos/{{wo.workcenter_id.id}}">
+                                                <span class="btn btn-secondary btn-lg mb8" style="width: 100%;">
+                                                    <t t-esc="wo.workcenter_id.name"/>
+                                                </span>
+                                            </a>
+                                        </t>
+                                        <t t-if="wo.workcenter_id.working_state=='blocked'">
+                                            <a t-attf-href="/mes_wc_working/open_wos/{{wo.workcenter_id.id}}">
+                                                <span class="btn btn-danger btn-lg mb8" style="width: 100%;">
+                                                    <t t-esc="wo.workcenter_id.name"/>
+                                                </span>
+                                            </a>
+                                        </t>
+                                        <t t-if="wo.workcenter_id.working_state=='done'">
+                                            <a t-attf-href="/mes_wc_working/open_wos/{{wo.workcenter_id.id}}">
+                                                <span class="btn btn-success btn-lg mb8" style="width: 100%;">
+                                                    <t t-esc="wo.workcenter_id.name"/>
+                                                </span>
+                                            </a>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </t>
+                        </table>
                     </div>
                 </div>
             </div>

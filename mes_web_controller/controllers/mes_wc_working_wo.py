@@ -5,6 +5,39 @@ import pytz
 
 
 class Main(http.Controller):
+
+    def wo_wide_search(self, search_where, search_val, domain):
+        """
+        _todo_
+        search workorder with a string contained in one of different attributes
+        @param search_where list : coded attribute to search in
+            'product'|'po'
+        @param search_val string : text to search
+        @param domain domain : enviroment filter
+        """
+
+        # set or operator for all the extends
+        domain.extend(['|', '|'])
+
+        if 'product' in search_where:
+            # search by product
+            domain.extend([
+                ("product_id", "ilike", search_val),
+                ("product_id.name", "ilike", search_val),
+                ])
+        if 'po' in search_where:
+            # search by production order
+            domain.extend([
+                ("production_id", "ilike", search_val)
+                ])
+
+        wos = request.env["mrp.workorder"].search(
+            domain,
+            limit=200,
+            order="date_planned_start",
+            )
+        return wos
+
     @http.route(
         [
             "/mes_wc_working/wo/<workorder_id>",
@@ -20,7 +53,8 @@ class Main(http.Controller):
         _todo_
         shows wo details based on selection
         POST parameters:
-        @param action : block|back|viewwo|search
+        @param action : block|back|search_wo|search_wide
+        @param dep_id : id of the department
         @param wc_id : id of the workcenter
         @param view_wo : id of the wo to view
         @param start_wo : id of the wo to start
@@ -31,7 +65,10 @@ class Main(http.Controller):
 
         user_tz = request.env.user.tz or str(pytz.utc.zone)
         local = pytz.timezone(user_tz)
+
         action = post.get("action", False)
+        dep_id = request.session.get('dep_id')
+        dep_id = dep_id if dep_id else post.get("dep_id", False)
         wc_id = int(post.get("wc_id", False))
         wc = request.env["mrp.workcenter"].browse(wc_id)
         wo_id = False
@@ -46,6 +83,8 @@ class Main(http.Controller):
 
         if view_wo:
             workorder_id = int(view_wo)
+        if workorder_id:
+            view_wo = workorder_id
 
         if action == "back" \
            and (not search_wo or search_wo == "") \
@@ -60,15 +99,41 @@ class Main(http.Controller):
                 wc = request.env["mrp.workorder"].browse(wo_id).workcenter_id
                 wc_id = wc.id
             except Exception:
-                wcs = request.env["mrp.workcenter"].search(
-                    [("count_open_wo", "!=", 0)],
-                    order="name",
-                    )
-                values = {
-                    "wcs": wcs,
-                    "error": _("Error: Workorder ID %d not found" % int(workorder_id)),
-                    }
-                return request.render("mes_web_controller.workcenter_working", values)
+                if dep_id:
+                    dprtmts = request.env["hr.department"].search([
+                        ("workcenter_ids", "!=", False),
+                        ("workcenter_ids.count_open_wo", "!=", 0),
+                        ],
+                        order="name",
+                        )
+
+                    for dep in dprtmts:
+                        wcs = request.env["mrp.workcenter"].search([
+                            ("count_open_wo", "!=", 0),
+                            ("department_id", "=", dep.id),
+                            ])
+                        dep.open_wo = sum(wc.count_open_wo for wc in wcs)
+                    values = {
+                        "dprtmts": dprtmts,
+                        "error": _(
+                            "Error: Workorder ID %d not found" % int(workorder_id)),
+                        }
+                    return request.render(
+                        "mes_web_controller.department_working", values
+                        )
+                else:
+                    wcs = request.env["mrp.workcenter"].search(
+                        [("count_open_wo", "!=", 0)],
+                        order="name",
+                        )
+                    values = {
+                        "wcs": wcs,
+                        "error": _(
+                            "Error: Workorder ID %d not found" % int(workorder_id)),
+                        }
+                    return request.render(
+                        "mes_web_controller.workcenter_working", values
+                        )
 
         # manage options selected
         if view_wo:
@@ -101,7 +166,7 @@ class Main(http.Controller):
                 # precedente?
                 }
             return request.render("mes_web_controller.workorder_alert", values)
-        elif action == "search" or search_wide:
+        elif action == "search_wo" or search_wide:
             # try to find wo based on search string
             wos = request.env["mrp.workorder"]
             # set base domain filter
@@ -116,51 +181,7 @@ class Main(http.Controller):
                     order="date_planned_start",
                     )
             if search_wide:
-                # search by plan
-                domain1 = domain.copy()
-                domain1.append(("plan_id", "ilike", search_wide))
-                values["search_wide"] = search_wide
-                wos = request.env["mrp.workorder"].search(
-                    domain1,
-                    limit=200,
-                    order="date_planned_start",
-                    )
-                if not wos:
-                    # search by product
-                    domain2 = domain.copy()
-                    domain2.append(("product_id", "ilike", search_wide))
-                    wos = request.env["mrp.workorder"].search(
-                        domain2,
-                        limit=200,
-                        order="date_planned_start",
-                        )
-                if not wos:
-                    # search by sale order
-                    domain3 = domain.copy()
-                    domain3.append(("sale_id", "ilike", search_wide))
-                    wos = request.env["mrp.workorder"].search(
-                        domain3,
-                        limit=200,
-                        order="date_planned_start",
-                        )
-                if not wos:
-                    # search by client sale order ref
-                    domain4 = domain.copy()
-                    domain4.append(("sale_id.client_order_ref", "ilike", search_wide))
-                    wos = request.env["mrp.workorder"].search(
-                        domain4,
-                        limit=200,
-                        order="date_planned_start",
-                        )
-                if not wos:
-                    # search by production order
-                    domain5 = domain.copy()
-                    domain5.append(("production_id", "ilike", search_wide))
-                    wos = request.env["mrp.workorder"].search(
-                        domain5,
-                        limit=200,
-                        order="date_planned_start",
-                        )
+                wos = self.wo_wide_search(['product', 'po'], search_wide, domain)
             # show result list
             values.update({
                     "wc": wc,

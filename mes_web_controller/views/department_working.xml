@@ -13,9 +13,12 @@
                     </div>
                     <div class="col-6 d-flex align-items-center" align="center">
                         <div style="width: 100%; text-align: center !important;">
-                            <h4>
-                                <t>Departments with open Workorders</t>
-                            </h4>
+                            <h3>
+                                <t>Departments</t>
+                            </h3>
+                            <h6>
+                                <t>with open Workorders</t>
+                            </h6>
                         </div>
                     </div>
                     <div class="col-3 d-flex align-items-left" align="left">
@@ -25,6 +28,7 @@
                 </div>
                 <form action="/mes_wc_working/open_wos/" method="POST">
                     <input name="csrf_token" type="hidden" t-att-value="request.csrf_token()"/>
+                    <input name="dep_id" type="hidden" value="-1"/>
                     <div class="row justify-content-center my-3">
                         <div class="col-4 d-flex align-items-right" align="right">
                             <input id="view_wc"
@@ -60,18 +64,14 @@
                     <table>
                         <t t-foreach="dprtmts" t-as="dprtmt">
                             <tr>
-                            <td>
+                            <td><h3>
                                 <span style="opacity: 0.5;">[<t t-esc="dprtmt.id"/>]</span>
                                 <t t-esc="dprtmt.name"/>
-                            </td>
-                            <td>
-                                <span class="btn btn-info btn-lg mb8">
-                                    <t t-esc="dprtmt.open_wo"/>
-                                </span>
+                                </h3>
                             </td>
                             <td>
                                 <a t-attf-href="/mes_wc_working/{{dprtmt.id}}">
-                                    <span class="btn btn-info btn-lg mb8">
+                                    <span class="btn btn-secondary btn-lg mb8">
                                         Workcenters
                                     </span>
                                 </a>
@@ -82,6 +82,11 @@
                                         Workorder
                                     </span>
                                 </a>
+                            </td>
+                            <td>
+                                <span class="btn btn-info btn-lg mb8" style="background-color: blueviolet;">
+                                    <t t-esc="dprtmt.open_wo"/>
+                                </span>
                             </td>
                             </tr>
                         </t>

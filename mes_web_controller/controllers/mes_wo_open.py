@@ -30,4 +30,7 @@ class Main(http.Controller):
             "wos_open": wos_open,
             "department": dep,
             }
+        if request.session.get('error'):
+            values['error'] = request.session.get('error')
+            request.session.update({'error': False})
         return request.render("mes_web_controller.wo_open", values)

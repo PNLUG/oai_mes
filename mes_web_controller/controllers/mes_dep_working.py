@@ -4,16 +4,9 @@ from odoo.http import request
 
 
 class Main(http.Controller):
-    @http.route(
-        "/mes_dep_working/",
-        type="http",
-        csrf=False,
-        auth="user",
-        website=True
-        )
-    def main(self, **post):
+    def department_active(self):
         """
-        show departments with workorders to do
+        returns departments with open workorders
         """
         dprtmts = request.env["hr.department"].search([
             ("workcenter_ids", "!=", False),
@@ -28,7 +21,24 @@ class Main(http.Controller):
                 ("department_id", "=", dep.id),
                 ])
             dep.open_wo = sum(wc.count_open_wo for wc in wcs)
+        return dprtmts
+
+    @http.route(
+        "/mes_dep_working/",
+        type="http",
+        csrf=False,
+        auth="user",
+        website=True
+        )
+    def department(self, **post):
+        """
+        show departments with workorders to do
+        """
+        dprtmts = self.department_active()
         values = {
             "dprtmts": dprtmts,
             }
+        if request.session.get('error'):
+            values['error'] = request.session.get('error')
+        request.session.update({'error':False})
         return request.render("mes_web_controller.department_working", values)
