@@ -49,7 +49,7 @@
                              style="background-color:lightgreen; color:black;">
                             <button class="btn">
                                 <span style="opacity: .7; font-size: .8em;">
-                                    Workorder [ID <t t-esc="wo.id"/>]
+                                    Work order [ID <t t-esc="wo.id"/>]
                                     </span>
                                 <h4>
                                     <t t-esc="wo.name"/>
@@ -129,7 +129,7 @@
                         <t>_!!!_ sezione NON productivity</t>
                         <t t-if="error">
                             <div class="alert alert-danger" role="alert">
-                                <t t-esc="error"/>
+                                <t t-raw="error"/>
                             </div>
                         </t>
                         <div class="row my-3 justify-content-between">

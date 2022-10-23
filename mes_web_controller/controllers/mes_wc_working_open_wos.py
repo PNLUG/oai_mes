@@ -60,7 +60,8 @@ class Main(http.Controller):
             if not wo and dep_id and int(dep_id) > 0:
                 request.session.update(
                     {'error':
-                     ("Error: Workorder ID %s not found in this Department" % view_wo)
+                     _("Error: work order ID <b>%s</b> not found in this department" %
+                       view_wo)
                      })
                 if view_type == 'workorder':
                     # redirect to wo list
@@ -72,7 +73,7 @@ class Main(http.Controller):
                 # redirect to dep list
                 request.session.update(
                     {'error':
-                     ("Error: Workorder ID %s not found" % view_wo)
+                     _("Error: work order ID <b>%s</b> not found" % view_wo)
                      })
                 return http.local_redirect("/mes_dep_working/")
             else:
@@ -147,12 +148,12 @@ class Main(http.Controller):
                 if int(dep_id) > 0:
                     if request.session['error']:
                         request.session.update({
-                            'error': _("Error: Workcenter ID %s not found " +
+                            'error': _("Error: workcenter ID <b>%s</b> not found " +
                                        "in this Department") % wc_id
                             })
                     else:
                         request.session['error'] = \
-                            _("Error: Workcenter ID %s not found " +
+                            _("Error: workcenter ID <b>%s</b> not found " +
                               "in this Department") % wc_id
                     if view_type == 'workorder':
                         # redirect to wo list
@@ -162,7 +163,7 @@ class Main(http.Controller):
                         return http.local_redirect("/mes_wc_working/%s" % int(dep_id))
                 else:
                     request.session.update({
-                        'error': _("Error: Workcenter ID %s not found" % wc_id)
+                        'error': _("Error: workcenter ID <b>%s</b> not found" % wc_id)
                         })
                     return http.local_redirect("/mes_dep_working/")
             else:
@@ -172,7 +173,7 @@ class Main(http.Controller):
                     )
                 values = {
                     "wcs": wcs,
-                    "error": _("Error: Workcenter ID %s not found" % wc_id),
+                    "error": _("Error: workcenter ID <b>%s</b> not found" % wc_id),
                     }
                 return request.render(
                     "mes_web_controller.workcenter_working",

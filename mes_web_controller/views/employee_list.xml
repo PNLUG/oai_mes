@@ -53,7 +53,7 @@
                     </t>
                     <t t-if="error">
                         <div class="alert alert-danger" role="alert">
-                            <t t-esc="error"/>
+                            <t t-raw="error"/>
                         </div>
                     </t>
                     <div class="row my-3">

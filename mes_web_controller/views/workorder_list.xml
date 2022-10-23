@@ -37,7 +37,7 @@
                             <button class="btn cursor_evi"
                                     style="background-color:lightgreen; color:black;">
                                 <h4 style="width: 100%;" title="Click to update list">
-                                    <span style="font-size: .7em;">Workorders</span><br/>
+                                    <span style="font-size: .7em;">Work orders</span><br/>
                                     <t t-esc="wc.count_open_wo"/>
                                 </h4>
                             </button>
@@ -57,32 +57,31 @@
                     <!-- search menu -->
                     <div class="row my-3">
                         <div class="col-5">
-                            <input name="search_wo"
+                            <input id="search_wo"
+                                   name="search_wo"
                                    type="text"
                                    class="form-control form-control-lg"
                                    autofocus="autofocus"
                                    autocomplete="off"
-                                   placeholder="Search Workorder id"/>
+                                   onfocus="$('#search_wide').val('');"
+                                   t-att-value="search_wo"
+                                   placeholder="Search work order id"/>
                         </div>
-                        <div class="col-1">
-                            <button name="action"
-                                    class="btn btn-secondary cursor_evi"
-                                    value="search_wo">
-                                <span class="fa fa-play fa-2x"/>
-                            </button>
-                        </div>
+
                         <div class="col-5">
-                            <input name="search_wide"
+                            <input id="search_wide"
+                                   name="search_wide"
                                    type="text"
                                    class="form-control form-control-lg"
                                    autocomplete="off"
+                                   onfocus="$('#search_wo').val('');"
                                    t-att-value="search_wide"
-                                   placeholder="Search on Workorder data"/>
+                                   placeholder="Filter on work orders data"/>
                         </div>
                         <div class="col-1 d-flex align-items-center justify-content-end">
                             <button name="action"
                                     class="btn btn-secondary cursor_evi"
-                                    value="search_wide">
+                                    value="search">
                                 <span class="fa fa-search fa-2x"/>
                             </button>
                         </div>
@@ -91,7 +90,7 @@
                     <!-- error message -->
                     <t t-if="error">
                         <div class="alert alert-danger" role="alert">
-                            <t t-esc="error"/>
+                            <t t-raw="error"/>
                         </div>
                     </t>
 
@@ -149,7 +148,7 @@
                                                         class="btn cursor_evi"
                                                         style="background-color:gray; color:white;"
                                                         t-att-value="wo.id">
-                                                    <span class="fa fa-search fa-2x"/>
+                                                    <span class="fa fa-info fa-2x"/>
                                                 </button>
                                             </td>
                                             <td>

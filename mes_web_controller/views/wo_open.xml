@@ -17,7 +17,7 @@
                                  <t t-esc="department.name"/>
                             </h3>
                             <h6>
-                                <t>Open Workorders</t>
+                                <t>Open work orders</t>
                             </h6>
                         </div>
                     </div>
@@ -44,7 +44,7 @@
                                    autofocus="autofocus"
                                    onfocus="$('#view_wo').val('');"
                                    autocomplete="off"
-                                   placeholder="Search Workcenter id"/>
+                                   placeholder="Search workcenter id"/>
                         </div>
                         <div class="col-3 d-flex align-items-right" align="right">
                             <input id="view_wo"
@@ -53,7 +53,7 @@
                                    class="form-control form-control-lg"
                                    onfocus="$('#view_wc').val('');"
                                    autocomplete="off"
-                                   placeholder="Search Workorder id"/>
+                                   placeholder="Search work order id"/>
                         </div>
                         <button type="submit" hidden="hidden">
                             <!-- used to activate form on enter -->
@@ -62,7 +62,7 @@
                 </form>
                 <t t-if="error">
                     <div class="alert alert-danger" role="alert">
-                        <t t-esc="error"/>
+                        <t t-raw="error"/>
                     </div>
                 </t>
                 <div class="row my-3">
@@ -70,7 +70,7 @@
                         <table>
                             <tr style="text-align: center;">
                                 <td>Planned start</td>
-                                <td>Workorder [<span style="opacity: 0.5;">[ID]</span></td>
+                                <td>Work order [<span style="opacity: 0.5;">[ID]</span></td>
                                 <td>Product</td>
                                 <td>Workcenter</td>
                             </tr>

@@ -59,7 +59,7 @@ class Main(http.Controller):
         @param search_wo : id of the wo to search
         @param search_wide : string to use to search wos
         * wo management *
-        @param action : block|back|search
+        @param action : block|back|search_wo|search_wide
         @param view_wo : id of the wo to view details
         @param start_wo : id of the wo to start
         @param setup_wo : id of the wo to setup
@@ -84,31 +84,10 @@ class Main(http.Controller):
         values = {}
         date_start_ms = ''
 
-        if search_wo:
-            try:
-                search_wo = int(search_wo)
-            except Exception:
-                wos = request.env["mrp.workorder"].search(
-                    [
-                        ("workcenter_id", "=", wc_id),
-                        ("state", "not in", ["done", "cancel"]),
-                    ],
-                    limit=200,
-                    order="date_planned_start",
-                    )
-                values = {
-                        "wc": wc,
-                        "wos": wos,
-                        "search_wide": search_wide,
-                        "search_wo": search_wo,
-                        "error": _(
-                            "Error: work order ID <b>%s</b> is not numeric" %
-                            search_wo),
-                        }
-                return request.render("mes_web_controller.workorder_list", values)
-
         if view_wo:
             workorder_id = int(view_wo)
+        if workorder_id:
+            view_wo = workorder_id
 
         if action == "back" \
            and (not search_wo or search_wo == "") \
@@ -117,7 +96,7 @@ class Main(http.Controller):
             return http.local_redirect("/mes_wc_working/%s" % wc.department_id.id)
 
         if workorder_id:
-            # check wo id and get related wc
+            # check wo id and set related wc
             try:
                 wo_id = int(workorder_id)
                 wc = request.env["mrp.workorder"].browse(wo_id).workcenter_id
@@ -162,15 +141,17 @@ class Main(http.Controller):
                         )
 
         # manage options selected
-        if start_wo:
+        if view_wo:
+            wo_id = view_wo
+        elif start_wo:
             # set wo working status
-            workorder_id = start_wo
+            wo_id = start_wo
             values = {
                 "loss_state_id": "working",
                 }
         elif setup_wo:
             # set wo setup status
-            workorder_id = setup_wo
+            wo_id = setup_wo
             values = {
                 "loss_state_id": "preparation",
                 }
@@ -190,45 +171,31 @@ class Main(http.Controller):
                 # precedente?
                 }
             return request.render("mes_web_controller.workorder_alert", values)
-        elif action == "search" or search_wide or (action == "back" and search_wo):
+        elif action == "search_wo" or search_wide:
             # try to find wo based on search string
+            wos = request.env["mrp.workorder"]
             # set base domain filter
             domain = [
                 ("workcenter_id", "=", wc_id),
                 ("state", "not in", ["done", "cancel"]),
                 ]
-            error = ''
-            if search_wide:
-                wos = self.wo_wide_search(
-                        ['product', 'po'],
-                        search_wide,
-                        domain
-                        )
-                if not wos:
-                    error = _("Info: No one work order with filter parameters")
-            else:
-                workorder_id = int(search_wo)
-                domain.append(('id', '=', workorder_id))
+            if not search_wide:
                 wos = request.env["mrp.workorder"].search(
                     domain,
                     limit=200,
                     order="date_planned_start",
-                )
-                if not wos:
-                    error = _(
-                        "Error: not found work order ID <b>%d</b> in this workcenter"
-                        % int(search_wo))
-            if search_wo and not wos or search_wide:
-                # show result list
-                values.update({
-                        "wc": wc,
-                        "wos": wos,
-                        "search_wide": search_wide,
-                        "search_wo": search_wo,
-                        "error": error,
-                        })
-                return request.render("mes_web_controller.workorder_list", values)
-        elif not workorder_id:
+                    )
+            if search_wide:
+                wos = self.wo_wide_search(['product', 'po'], search_wide, domain)
+            # show result list
+            values.update({
+                    "wc": wc,
+                    "wos": wos,
+                    "search_wide": search_wide,
+                    "search_wo": search_wo,
+                    })
+            return request.render("mes_web_controller.workorder_list", values)
+        else:
             # goes to wo list of the wc
             return http.local_redirect(("/mes_wc_working/open_wos/%d" % wc_id))
 
@@ -236,7 +203,7 @@ class Main(http.Controller):
         try:
             wo = request.env["mrp.workorder"].search([
                 ('workcenter_id', '=', wc_id),
-                ('id', '=', workorder_id)
+                ('id', '=', int(wo_id))
                 ])
             if not wo.state or wo.state in ["done", "cancel"]:
                 raise Exception
@@ -254,8 +221,9 @@ class Main(http.Controller):
                 "wos": wos,
                 "search_wide": search_wide,
                 "search_wo": search_wo,
-                "error": _("Error: work order ID <b>%d</b> not found in this workcenter"
-                           % workorder_id),
+                "error": _(
+                    "Error: work order ID <b>%d</b> not found for this workcenter"
+                    % int(wo_id)),
                 }
             return request.render("mes_web_controller.workorder_list", values)
 
@@ -273,12 +241,12 @@ class Main(http.Controller):
                 ).employee_ids
             )
 
-        if workorder_id:
+        if view_wo:
             # get the last productivity info to show
             productivity = request.env["mrp.workcenter.productivity"].search(
                 [
                     ("workcenter_id", "=", wo.workcenter_id.id),
-                    ("workorder_id", "=", workorder_id),
+                    ("workorder_id", "=", wo.id),
                 ],
                 limit=1,
                 order="id desc",
@@ -290,7 +258,7 @@ class Main(http.Controller):
             productivity = request.env["mrp.workcenter.productivity"].search(
                 [
                     ("workcenter_id", "=", wo.workcenter_id.id),
-                    ("workorder_id", "=", workorder_id),
+                    ("workorder_id", "=", wo.id),
                     ("date_end", "=", False),
                 ],
                 limit=1,

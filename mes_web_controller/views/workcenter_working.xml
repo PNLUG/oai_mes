@@ -17,7 +17,7 @@
                                  <t t-esc="dep.name"/>
                             </h3>
                             <h6>
-                                <t>Workcenter with open Workorder</t>
+                                <t>Workcenter with open work order</t>
                             </h6>
                         </div>
                     </div>
@@ -39,12 +39,12 @@
                                    autofocus="autofocus"
                                    onfocus="$('#view_wo').val('');"
                                    autocomplete="off"
-                                   placeholder="Search Workcenter id"/>
+                                   placeholder="Search workcenter id"/>
                         </div>
-                        <div class="col-5 d-flex align-items-right" align="right">
+                        <div class="col-6 d-flex align-items-right" align="right">
                             <a t-attf-href="/mes_wo_open/{{dep.id}}">
                                 <span class="btn btn-info btn-lg mb8">
-                                    Workorder
+                                    <nobr>Work order</nobr>
                                 </span>
                             </a>
                             <input id="view_wo"
@@ -53,7 +53,7 @@
                                    class="form-control form-control-lg"
                                    onfocus="$('#view_wc').val('');"
                                    autocomplete="off"
-                                   placeholder="Search Workorder id"/>
+                                   placeholder="Search work order id"/>
                         </div>
                         <button type="submit" hidden="hidden">
                             <!-- used to activate form on enter -->
@@ -62,7 +62,7 @@
                 </form>
                 <t t-if="error">
                     <div class="alert alert-danger" role="alert">
-                        <t t-esc="error"/>
+                        <t t-raw="error"/>
                     </div>
                 </t>
                 <div class="row my-3">
