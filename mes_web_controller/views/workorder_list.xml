@@ -12,35 +12,60 @@
                     <!-- main menu -->
                     <div class="row my-3">
                         <div class="col-2 d-flex align-items-center" align="center">
-                            <button name="action"
-                                    class="btn cursor_evi"
-                                    type="submit"
-                                    style="background-color:blue; color:white;"
-                                    value="back"
-                                    >
-                                <span class="fa fa-arrow-left fa-2x"/>
-                                <br/>
-                                <span style="font-weight: bold; vertical-align: middle;">Workcenters</span>
-                            </button>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <a class="btn btn-primary btn-lg btn-block mb8"
+                                            t-attf-href="/mes_dep_working"
+                                            title="Back to Departments">
+                                            Departments</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a class="btn btn-secondary btn-lg btn-block mb8"
+                                            t-attf-href="/mes_wc_working/{{wc.department_id.id}}"
+                                            title="Back to Department's Workcenters">
+                                            Workcenters</a>
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
-                        <div class="col-5 rounded d-flex align-items-center"
+                        <div class="col-5 rounded d-flex xalign-items-center"
                              style="background-color:LightGray;">
-                            <span style="opacity: .5; font-size: .8em; position: absolute; top: 0px;">Workcenter [ID <t t-esc="wc.id"/>]</span>
-                            <h4>
-                                <t t-esc="wc.name"/>
-                                <t t-if="wc.code">
-                                    (<span style="font-weight: bold;"><t t-esc="wc.code"/></span>)
-                                </t>
-                            </h4>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <span style="opacity: .7; font-size: .8em;">
+                                            <t>Department</t> <b><t t-esc="wc.department_id.name"/></b>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span style="opacity: .5; font-size: .8em;">Workcenter [ID <t t-esc="wc.id"/>]</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h4>
+                                            <t t-esc="wc.name"/>
+                                            <t t-if="wc.code">
+                                                (<span style="font-weight: bold;"><t t-esc="wc.code"/></span>)
+                                            </t>
+                                        </h4>
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
-                        <div class="col-3 d-flex align-items-center" align="center">
-                            <button class="btn cursor_evi"
-                                    style="background-color:lightgreen; color:black;">
-                                <h4 style="width: 100%;" title="Click to update list">
-                                    <span style="font-size: .7em;">Work orders</span><br/>
+                        <div class="col-2 rounded d-flex align-items-center"
+                             style="background-color:lightgreen; text-align: center;">
+                            <h4 style="width: 100%;" title="Click to update list">
+                                    <span style="font-size: .7em;">Work orders open</span><br/>
                                     <t t-esc="wc.count_open_wo"/>
                                 </h4>
-                            </button>
+                        </div>
+                        <div class="col-1">
                         </div>
                         <div class="col-2 d-flex align-items-center justify-content-end">
                             <button name="action"
@@ -53,7 +78,10 @@
                             </button>
                         </div>
                     </div>
-
+                </form>
+                <form action="/mes_wc_working/wo/" method="POST">
+                    <input name="csrf_token" type="hidden" t-att-value="request.csrf_token()"/>
+                    <input name="wc_id" type="hidden" t-att-value="wc.id"/>
                     <!-- search menu -->
                     <div class="row my-3">
                         <div class="col-5">
@@ -63,7 +91,7 @@
                                    class="form-control form-control-lg"
                                    autofocus="autofocus"
                                    autocomplete="off"
-                                   onfocus="$('#search_wide').val('');"
+                                   onkeyup="$('#search_wide').val('');"
                                    t-att-value="search_wo"
                                    placeholder="Search work order id"/>
                         </div>
@@ -74,7 +102,7 @@
                                    type="text"
                                    class="form-control form-control-lg"
                                    autocomplete="off"
-                                   onfocus="$('#search_wo').val('');"
+                                   onkeyup="$('#search_wo').val('');"
                                    t-att-value="search_wide"
                                    placeholder="Filter on work orders data"/>
                         </div>

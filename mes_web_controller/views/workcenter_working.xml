@@ -42,7 +42,8 @@
                                    placeholder="Search workcenter id"/>
                         </div>
                         <div class="col-6 d-flex align-items-right" align="right">
-                            <a t-attf-href="/mes_wo_open/{{dep.id}}">
+                            <a t-attf-href="/mes_wo_open/{{dep.id}}"
+                                title="Department's Work Orders list">
                                 <span class="btn btn-info btn-lg mb8">
                                     <nobr>Work order</nobr>
                                 </span>

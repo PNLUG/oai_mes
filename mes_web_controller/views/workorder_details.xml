@@ -11,7 +11,7 @@
                     <input name="wc_id" type="hidden" t-att-value="workcenter.id"/>
                     <input name="productivity_id" type="hidden" t-att-value="productivity.id"/>
                     _!!!_ vista workorder_details
-                    _!!!_ STATUS <t t-esc="state"/>
+                    _!!!_ WO STATE [<t t-esc="wo.state"/>] PRODUCTIVITY STATUS [<t t-esc="state"/>]
 
                     <!-- header -->
                     <div class="row my-3">
@@ -68,13 +68,13 @@
                                 </t>
                         </div>
                         <div class="col-2 d-flex align-items-center justify-content-end">
-                            <t t-if="state=='working'">
+                            <t t-if="state!='working'">
                                 <button name="action"
                                         type="submit"
                                         class="btn cursor_evi"
                                         style="background-color:green; color:white;"
                                         value="block">
-                                    <span style="font-weight: bold; vertical-align: middle; font-size: 1.5em;">Start</span>
+                                    <span style="font-weight: bold; vertical-align: middle; font-size: 1.5em;">Start _todo_</span>
                                     <span class="fa fa-play fa-2x" style="vertical-align: middle;"/>
                                 </button>
                             </t>
@@ -85,7 +85,7 @@
                                     class="btn cursor_evi"
                                     style="background-color:red; color:white;"
                                     value="block">
-                                <span style="font-weight: bold; vertical-align: middle; font-size: 1.5em;">Stop</span>
+                                <span style="font-weight: bold; vertical-align: middle; font-size: 1.5em;">Stop _todo_</span>
                                 <span class="fa fa-exclamation-triangle fa-2x" style="vertical-align: middle;"/>
                             </button>
                         </div>
@@ -98,16 +98,8 @@
                             <t t-raw="error"/>
                         </div>
                     </t>
-
                     <t t-if="state=='working'">
                         <div class="row my-3">
-                            <div class="col-1 d-flex align-items-center">
-                                <div name="setup_wo2"
-                                     class="btn"
-                                     style="background-color: rgb(40, 167, 69); color:white;">
-                                    <span class="fa fa-play fa-2x"/>
-                                </div>
-                            </div>
                             <div class="col-6 rounded d-flex align-items-center"
                                  style="background-color: rgb(40, 167, 69);">
                                 <h4>Working</h4>
@@ -234,7 +226,7 @@
                     </div>
 
                     <!-- employee -->
-                    <t t-if="state=='preparation' or state=='working'">
+                    <t t-if="state=='preparation' or state=='progress'">
                         <div class="row my-3">
                             <t t-foreach="productivity.employee_ids" t-as="employee">
                                 <div class="bg-primary rounded col d-flex align-items-center mx-1">
@@ -253,7 +245,7 @@
                     </t>
 
                     <!-- production declaration -->
-                    <t t-if="state=='working'">
+                    <t t-if="state=='progress'">
                         <div id="controls">
                             <div class="row">
                                 <div class="col-3" style="text-align: right;">

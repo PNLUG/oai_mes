@@ -75,14 +75,29 @@ class Main(http.Controller):
         view_wo = post.get("view_wo", False)
         start_wo = post.get("start_wo", False)
         setup_wo = post.get("setup_wo", False)
-        search_wo = post.get("search_wo", False)
-        search_wide = post.get("search_wide", False)
+        search_wo = post.get("search_wo", '')
+        search_wide = post.get("search_wide", '')
 
         wc = request.env["mrp.workcenter"].browse(wc_id)
         productivity = request.env["mrp.workcenter.productivity"]
         wo_id = False
         values = {}
         date_start_ms = ''
+
+        if action == 'search' and search_wo.strip() == '' and search_wide.strip() == '':
+            wos = request.env["mrp.workorder"].search(
+                [
+                    ("workcenter_id", "=", wc_id),
+                    ("state", "not in", ["done", "cancel"]),
+                ],
+                limit=200,
+                order="date_planned_start",
+                )
+            values = {
+                    "wc": wc,
+                    "wos": wos,
+                    }
+            return request.render("mes_web_controller.workorder_list", values)
 
         if search_wo:
             try:
@@ -111,8 +126,8 @@ class Main(http.Controller):
             workorder_id = int(view_wo)
 
         if action == "back" \
-           and (not search_wo or search_wo == "") \
-           and (not search_wide or search_wide == ""):
+           and (not search_wo or search_wo == '') \
+           and (not search_wide or search_wide == ''):
             # goes to main view
             return http.local_redirect("/mes_wc_working/%s" % wc.department_id.id)
 
@@ -190,7 +205,13 @@ class Main(http.Controller):
                 # precedente?
                 }
             return request.render("mes_web_controller.workorder_alert", values)
-        elif action == "search" or search_wide or (action == "back" and search_wo):
+        elif (action == 'search'                            # click button search
+              or (action == "back"                          # form post
+                  and ((search_wide and search_wide != '')  # with a wide search
+                       or (search_wo and search_wo != '')   # with an id search
+                       )
+                  )
+              ) and not view_wo:
             # try to find wo based on search string
             # set base domain filter
             domain = [
@@ -205,7 +226,8 @@ class Main(http.Controller):
                         domain
                         )
                 if not wos:
-                    error = _("Info: No one work order with filter parameters")
+                    error = _("Info: No one work order with reference to <b>%s</b>"
+                              % search_wide)
             else:
                 workorder_id = int(search_wo)
                 domain.append(('id', '=', workorder_id))
@@ -216,8 +238,8 @@ class Main(http.Controller):
                 )
                 if not wos:
                     error = _(
-                        "Error: not found work order ID <b>%d</b> in this workcenter"
-                        % int(search_wo))
+                        "Error: not found work order ID <b>%s</b> in this workcenter"
+                        % search_wo)
             if search_wo and not wos or search_wide:
                 # show result list
                 values.update({

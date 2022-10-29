@@ -32,7 +32,8 @@
                     <input name="view_type" type="hidden" value="workorder"/>
                     <div class="row justify-content-center my-3">
                         <div class="col-5 d-flex align-items-right" align="right">
-                            <a t-attf-href="/mes_wc_working/{{department.id}}">
+                            <a t-attf-href="/mes_wc_working/{{department.id}}"
+                                title="Department's Workcenters list">
                                 <span class="btn btn-secondary btn-lg mb8">
                                     Workcenters
                                 </span>

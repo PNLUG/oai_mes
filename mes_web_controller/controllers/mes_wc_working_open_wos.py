@@ -56,7 +56,25 @@ class Main(http.Controller):
         view_type = post.get("view_type", False)
 
         if view_wo:
+            try:
+                view_wo = int(view_wo)
+            except Exception:
+                request.session.update(
+                    {'error':
+                     _("Error: work order ID <b>%s</b> is not numeric" % view_wo),
+                     'dep_id': dep_id
+                     })
+                if view_type == 'workorder':
+                    # redirect to wo list
+                    return http.local_redirect("/mes_wo_open/%s" % int(dep_id))
+                elif int(dep_id) > 0:
+                    # redirect to wc list
+                    return http.local_redirect("/mes_wc_working/%s" % int(dep_id))
+                else:
+                    return http.local_redirect("/mes_dep_working/")
+
             wo = request.env["mrp.workorder"].search([('id', '=', view_wo)])
+
             if not wo and dep_id and int(dep_id) > 0:
                 request.session.update(
                     {'error':
@@ -84,6 +102,24 @@ class Main(http.Controller):
         workcenter_id = int(workcenter_id) if workcenter_id else False
 
         try:
+            if view_wc:
+                try:
+                    view_wc = int(view_wc)
+                except Exception:
+                    request.session.update(
+                        {'error':
+                        _("Error: workcenter ID <b>%s</b> is not numeric" % view_wc),
+                        'dep_id': dep_id
+                        })
+                    if view_type == 'workorder':
+                        # redirect to wo list
+                        return http.local_redirect("/mes_wo_open/%s" % int(dep_id))
+                    elif int(dep_id) > 0:
+                        # redirect to wc list
+                        return http.local_redirect("/mes_wc_working/%s" % int(dep_id))
+                    else:
+                        return http.local_redirect("/mes_dep_working/")
+
             wc_id = int(view_wc) if view_wc else workcenter_id
             wc = request.env["mrp.workcenter"].search([('id', '=', wc_id)])
             if not wc:
