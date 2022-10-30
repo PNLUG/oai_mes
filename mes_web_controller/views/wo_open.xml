@@ -8,7 +8,7 @@
                 <t>_!!!_ vista wo_open</t>
                 <div class="row justify-content-center my-3">
                     <div class="col-3 d-flex align-items-left" align="left">
-                        <a href="/mes_dep_working" class="btn btn-primary btn-lg btn-block mb8"
+                        <a href="/mes_dep_working" class="btn btn-primary btn-lg btn-block mb8 button_3d"
                             >Departments</a>
                     </div>
                     <div class="col-6 d-flex align-items-center" align="center">
@@ -22,7 +22,7 @@
                         </div>
                     </div>
                     <div class="col-3 d-flex align-items-left" align="left">
-                        <a t-attf-href="/mes_wo_open/{{department.id}}" class="btn btn-primary btn-lg btn-block mb8"
+                        <a t-attf-href="/mes_wo_open/{{department.id}}" class="btn btn-primary btn-lg btn-block mb8 button_3d"
                             >Update</a>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
                         <div class="col-5 d-flex align-items-right" align="right">
                             <a t-attf-href="/mes_wc_working/{{department.id}}"
                                 title="Department's Workcenters list">
-                                <span class="btn btn-secondary btn-lg mb8">
+                                <span class="btn btn-secondary btn-lg mb8 button_3d">
                                     Workcenters
                                 </span>
                             </a>
@@ -82,7 +82,7 @@
                                     </td>
                                     <td>
                                         <a t-attf-href="/mes_wc_working/wo/{{wo.id}}">
-                                            <span class="btn btn-info btn-lg mb8" style="width: 100%;">
+                                            <span class="btn btn-info btn-lg mb8 button_3d" style="width: 100%;">
                                                 <t t-esc="wo.name"/>
                                                 <span style="opacity: 0.5;">[<t t-esc="wo.id"/>]</span>
                                             </span>
@@ -95,21 +95,21 @@
                                         <!-- _todo_ refactor using t-attf-class -->
                                         <t t-if="wo.workcenter_id.working_state=='normal'">
                                             <a t-attf-href="/mes_wc_working/open_wos/{{wo.workcenter_id.id}}">
-                                                <span class="btn btn-secondary btn-lg mb8" style="width: 100%;">
+                                                <span class="btn btn-secondary btn-lg mb8 button_3d" style="width: 100%;">
                                                     <t t-esc="wo.workcenter_id.name"/>
                                                 </span>
                                             </a>
                                         </t>
                                         <t t-if="wo.workcenter_id.working_state=='blocked'">
                                             <a t-attf-href="/mes_wc_working/open_wos/{{wo.workcenter_id.id}}">
-                                                <span class="btn btn-danger btn-lg mb8" style="width: 100%;">
+                                                <span class="btn btn-danger btn-lg mb8 button_3d" style="width: 100%;">
                                                     <t t-esc="wo.workcenter_id.name"/>
                                                 </span>
                                             </a>
                                         </t>
                                         <t t-if="wo.workcenter_id.working_state=='done'">
                                             <a t-attf-href="/mes_wc_working/open_wos/{{wo.workcenter_id.id}}">
-                                                <span class="btn btn-success btn-lg mb8" style="width: 100%;">
+                                                <span class="btn btn-success btn-lg mb8 button_3d" style="width: 100%;">
                                                     <t t-esc="wo.workcenter_id.name"/>
                                                 </span>
                                             </a>

@@ -23,3 +23,9 @@ input::-webkit-inner-spin-button {
     input[type=number] {
     -moz-appearance: textfield;
     }
+
+.button_3d {
+    box-shadow: 1px 1px 1px 1px gray;
+    margin-right: 2px;
+    margin-bottom: 2px;
+}

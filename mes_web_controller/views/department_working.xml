@@ -8,7 +8,7 @@
                 <t>_!!!_ vista department_working</t>
                 <div class="row justify-content-center my-3">
                     <div class="col-3 d-flex align-items-left" align="left">
-                        <a href="/menu" class="btn btn-primary btn-lg btn-block mb8"
+                        <a href="/menu" class="btn btn-primary btn-lg btn-block mb8 button_3d"
                             >Menu</a>
                     </div>
                     <div class="col-6 d-flex align-items-center" align="center">
@@ -22,7 +22,7 @@
                         </div>
                     </div>
                     <div class="col-3 d-flex align-items-left" align="left">
-                        <a href="/mes_dep_working" class="btn btn-primary btn-lg btn-block mb8"
+                        <a href="/mes_dep_working" class="btn btn-primary btn-lg btn-block mb8 button_3d"
                             >Update</a>
                     </div>
                 </div>
@@ -71,14 +71,14 @@
                             </td>
                             <td>
                                 <a t-attf-href="/mes_wc_working/{{dprtmt.id}}">
-                                    <span class="btn btn-secondary btn-lg mb8">
+                                    <span class="btn btn-secondary btn-lg mb8 button_3d">
                                         Workcenters
                                     </span>
                                 </a>
                             </td>
                             <td>
                                 <a t-attf-href="/mes_wo_open/{{dprtmt.id}}">
-                                    <span class="btn btn-info btn-lg mb8">
+                                    <span class="btn btn-info btn-lg mb8 button_3d">
                                         Work orders
                                     </span>
                                 </a>

@@ -15,79 +15,91 @@
 
                     <!-- header -->
                     <div class="row my-3">
-                        <div class="col-10 d-flex">
-                            <button name="action"
-                                    class="btn cursor_evi"
-                                    type="submit"
-                                    style="background-color:lightgray; color:black; text-align: left;"
-                                    value="workcenter"
-                                    >
-                                <span style="opacity: .7; font-size: .8em;">
-                                    <span class="fa fa-arrow-left fa-2x"
-                                    /> Workcenter [ID <t t-esc="wo.workcenter_id.id"/>]
-                                    </span>
-                                <h4>
-                                    <t t-esc="wo.workcenter_id.name"/>
-                                    <t t-if="wo.workcenter_id.code">
-                                        (<span style="font-weight: bold;"><t t-esc="wo.workcenter_id.code"/></span>)
+                        <div class="col-3 d-flex">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <a class="btn btn-secondary btn-lg btn-block mb8 button_3d"
+                                            t-attf-href="/mes_wc_working/{{wo.workcenter_id.department_id.id}}"
+                                            title="Back to Department's Workcenters">
+                                            Workcenters</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <button name="action"
+                                            class="btn cursor_evi button_3d"
+                                            type="submit"
+                                            style="background-color:lightgray; color:black; text-align: left;"
+                                            value="workcenter"
+                                            >
+                                        <h4>
+                                            <t t-esc="wo.workcenter_id.name"/>
+                                            <t t-if="wo.workcenter_id.code">
+                                                (<span style="font-weight: bold;"><t t-esc="wo.workcenter_id.code"/></span>)
+                                            </t>
+                                        </h4>
+                                    </button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-3 d-flex" style="background-color: lightgray;">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <span style="opacity: .7; font-size: .8em;">
+                                            Work order [ID <t t-esc="wo.id"/>]
+                                            </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h4>
+                                            <t t-esc="wo.name"/>
+                                        </h4>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-2 d-flex- align-items-center">
+                            <div style="background-color: lightgreen; text-align: center; margin-top: 2em;">
+                                <t>Elapsed time</t><br/>
+                                <t t-if="data_start_msec">
+                                    <h4 id="timer" t-att-data-value="data_start_msec"/>
                                     </t>
-                                </h4>
-                            </button>
+                                <t t-if="not data_start_msec">
+                                    <h5 id="timer" data-value=""><t t-esc="website.secs_to_hrs(wo.duration)"/></h5>
+                                    </t>
+                            </div>
                         </div>
-                        <div class="col-2 d-flex">
-                            <button name="action"
-                                    class="btn cursor_evi"
-                                    type="submit"
-                                    style="background-color:blue; color:white;"
-                                    value="wc_list"
-                                    >
-                                <span style="font-weight: bold; vertical-align: middle;">Workcenters<br/>list</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="row my-3">
-                        <div class="col-6 rounded d-flex align-items-center"
-                             style="background-color:lightgreen; color:black;">
-                            <button name="action"
-                                    class="btn">
-                                <span style="opacity: .7; font-size: .8em;">
-                                    Work order [ID <t t-esc="wo.id"/>]
-                                    </span>
-                                <h4>
-                                    <t t-esc="wo.name"/>
-                                </h4>
-                            </button>
-                        </div>
-                        <div class="col-2 align-items-center" style="background-color: #90eeee;">
-                            <t>Elapsed time</t><br/>
-                            <t t-if="data_start_msec">
-                                <h4 id="timer" t-att-data-value="data_start_msec"/>
-                                </t>
-                            <t t-if="not data_start_msec">
-                                <h4 id="timer" data-value=""><t t-esc="website.secs_to_hrs(wo.duration)"/></h4>
-                                </t>
-                        </div>
-                        <div class="col-2 d-flex align-items-center justify-content-end">
+                        <div class="col-2 rounded d-flex align-items-center justify-content-end" >
                             <t t-if="state!='working'">
-                                <button name="action"
-                                        type="submit"
-                                        class="btn cursor_evi"
-                                        style="background-color:green; color:white;"
-                                        value="block">
-                                    <span style="font-weight: bold; vertical-align: middle; font-size: 1.5em;">Start _todo_</span>
+                                <div class="btn cursor_evi rounded d-flex align-items-center justify-content-end button_3d"
+                                    style="background-color:green; color:white;">
+                                    <button name="action"
+                                            type="submit"
+                                            class="btn"
+                                            value="start">
+                                        <span style="font-weight: bold; vertical-align: middle; font-size: 1.2em; color:white;"
+                                            >_todo_ Start Workcenter</span>
+                                    </button>
                                     <span class="fa fa-play fa-2x" style="vertical-align: middle;"/>
-                                </button>
+                                </div>
                             </t>
                         </div>
-                        <div class="col-2 d-flex align-items-center justify-content-end">
-                            <button name="action"
-                                    type="submit"
-                                    class="btn cursor_evi"
-                                    style="background-color:red; color:white;"
-                                    value="block">
-                                <span style="font-weight: bold; vertical-align: middle; font-size: 1.5em;">Stop _todo_</span>
-                                <span class="fa fa-exclamation-triangle fa-2x" style="vertical-align: middle;"/>
-                            </button>
+                        <div class="col-2 rounded d-flex align-items-center justify-content-end" >
+                            <div class="btn cursor_evi rounded d-flex align-items-center justify-content-end button_3d"
+                                style="background-color:red; color:white;">
+                                    <button name="action"
+                                            type="submit"
+                                            class="btn"
+                                            value="block">
+                                        <span style="font-weight: bold; vertical-align: middle; font-size: 1.2em; color:white;"
+                                            >_todo_ Stop Workcenter</span>
+                                    </button>
+                                    <span class="fa fa-exclamation-triangle fa-2x" style="vertical-align: middle;"/>
+                            </div>
                         </div>
                     </div>
 

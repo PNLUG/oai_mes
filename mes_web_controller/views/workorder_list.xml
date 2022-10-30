@@ -15,7 +15,7 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <a class="btn btn-primary btn-lg btn-block mb8"
+                                        <a class="btn btn-primary btn-lg btn-block mb8 button_3d"
                                             t-attf-href="/mes_dep_working"
                                             title="Back to Departments">
                                             Departments</a>
@@ -23,7 +23,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <a class="btn btn-secondary btn-lg btn-block mb8"
+                                        <a class="btn btn-secondary btn-lg btn-block mb8 button_3d"
                                             t-attf-href="/mes_wc_working/{{wc.department_id.id}}"
                                             title="Back to Department's Workcenters">
                                             Workcenters</a>
@@ -67,15 +67,18 @@
                         </div>
                         <div class="col-1">
                         </div>
-                        <div class="col-2 d-flex align-items-center justify-content-end">
-                            <button name="action"
-                                    type="submit"
-                                    class="btn cursor_evi"
-                                    style="background-color:red; color:white;"
-                                    value="block">
-                                <span style="font-weight: bold; vertical-align: middle; font-size: 1.5em;">Stop</span>
+                        <div class="col-2 rounded d-flex align-items-center justify-content-end" >
+                            <div class="btn cursor_evi rounded d-flex align-items-center justify-content-end button_3d"
+                                style="background-color:red; color:white;">
+                                <button name="action"
+                                        type="submit"
+                                        class="btn"
+                                        value="block">
+                                    <span style="font-weight: bold; vertical-align: middle; font-size: 1.2em; color:white;"
+                                        >Stop Workcenter</span>
+                                </button>
                                 <span class="fa fa-exclamation-triangle fa-2x" style="vertical-align: middle;"/>
-                            </button>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -108,7 +111,7 @@
                         </div>
                         <div class="col-1 d-flex align-items-center justify-content-end">
                             <button name="action"
-                                    class="btn btn-secondary cursor_evi"
+                                    class="btn btn-secondary cursor_evi button_3d"
                                     value="search">
                                 <span class="fa fa-search fa-2x"/>
                             </button>
@@ -129,8 +132,8 @@
                                 <thead style="vertical-align: middle;">
                                     <th>ID</th>
                                     <th>Name</th>
-                                    <th>Code</th>
-                                    <th>Start date</th>
+                                    <th>Product</th>
+                                    <th>Planned Start</th>
                                     <th>Order pcs</th>
                                     <th>Done pcs</th>
                                     <th>Standard time<br/><l style="color: blue;">Effective time</l></th>
@@ -162,9 +165,9 @@
                                                 <span t-esc="int(wo.qty_produced)"/>
                                             </td>
                                             <td>
-                                                <span t-esc="website.secs_to_hrs(wo.duration_expected)"/>
+                                                <nobr><span t-esc="website.secs_to_hrs(wo.duration_expected)"/></nobr>
                                                 <br/>
-                                                <l style="color: blue;">_todo_ tempo effettivo</l>
+                                                <nobr><l style="color: blue;"><t t-esc="website.secs_to_hrs(wo.duration)"/></l></nobr>
                                             </td>
                                             </td>
                                             <td>
@@ -173,7 +176,7 @@
                                             <td>
                                                 <button name="view_wo"
                                                         type="submit"
-                                                        class="btn cursor_evi"
+                                                        class="btn cursor_evi button_3d"
                                                         style="background-color:gray; color:white;"
                                                         t-att-value="wo.id">
                                                     <span class="fa fa-info fa-2x"/>
@@ -182,7 +185,7 @@
                                             <td>
                                                 <button name="start_wo"
                                                         type="submit"
-                                                        class="btn cursor_evi"
+                                                        class="btn cursor_evi button_3d"
                                                         style="background-color:green;color:white;"
                                                         t-att-value="wo.id">
                                                     <span class="fa fa-play fa-2x"/>
@@ -191,7 +194,7 @@
                                             <td>
                                                 <button name="setup_wo"
                                                         type="submit"
-                                                        class="btn cursor_evi"
+                                                        class="btn cursor_evi button_3d"
                                                         style="background-color:orange;color:white;"
                                                         t-att-value="wo.id">
                                                     <span class="fa fa-wrench fa-2x"/>
