@@ -74,10 +74,19 @@
                                         type="submit"
                                         class="btn"
                                         value="block">
-                                    <span style="font-weight: bold; vertical-align: middle; font-size: 1.2em; color:white;"
-                                        >Stop Workcenter</span>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <span style="font-weight: bold; vertical-align: middle; font-size: 1.2em; color:white;"
+                                                    >Stop Workcenter</span>
+                                            </td>
+                                            <td style="padding: 3px;">
+                                                <span class="fa fa-exclamation-triangle fa-2x" style="vertical-align: middle; color: white;"/>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </button>
-                                <span class="fa fa-exclamation-triangle fa-2x" style="vertical-align: middle;"/>
+
                             </div>
                         </div>
                     </div>

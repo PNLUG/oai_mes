@@ -6,79 +6,146 @@
         <link rel="stylesheet" href="/mes_web_controller/static/src/css/mes_web_controller.css"/>
         <t t-call="web.html_container">
             <div class="container">
-                <t>_!!!_ vista workorder_alert</t>
+                <t>_!!!_ vista workorder_alert</t> State <t t-if="productivity"><t t-esc="productivity.loss_id.name"/></t>
                 <form action="/mes_wc_working/alert/" method="POST">
                     <input name="csrf_token" type="hidden" t-att-value="request.csrf_token()"/>
-                    <input name="workcenter_id" type="hidden" t-att-value="workcenter.id"/>
+                    <input name="workcenter_id" type="hidden" t-att-value="wc.id"/>
                     <input name="productivity_id" type="hidden" t-if="productivity" t-att-value="productivity.id"/>
 
                     <!-- header -->
                     <div class="row my-3">
-                        <div class="col-10 d-flex align-items-left" align="left">
-                            <button name="action"
-                                    class="btn cursor_evi"
-                                    type="submit"
-                                    style="background-color:lightgray; color:black; text-align: left;"
-                                    value="workcenter"
-                                    >
-                                <span style="opacity: .7; font-size: .8em;">
-                                    <span class="fa fa-arrow-left fa-2x"
-                                    /> Workcenter [ID <t t-esc="workcenter.id"/>]
-                                    </span>
-                                <h4>
-                                    <t t-esc="workcenter.name"/>
-                                    <t t-if="workcenter.code">
-                                        (<span style="font-weight: bold;"><t t-esc="workcenter.code"/></span>)
+                        <div class="col-3 d-flex">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <a class="btn btn-secondary btn-lg btn-block mb8 button_3d"
+                                            t-attf-href="/mes_wc_working/{{wc.department_id.id}}"
+                                            title="Back to Department's Workcenters">
+                                            Workcenters</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a class="btn btn-info btn-lg btn-block mb8 button_3d"
+                                            t-attf-href="/mes_wc_working/open_wos/{{wc.id}}"
+                                            title="Back to Workcenter's work orders">
+                                            <t>WC Work orders</t>
+                                            </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-5 d-flex" style="background-color: lightgray;">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <span style="opacity: .7; font-size: .8em;">
+                                            <t>Department</t> <b><t t-esc="wc.department_id.name"/></b>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span style="opacity: .5; font-size: .8em;">Workcenter [ID <t t-esc="wc.id"/>]</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h4>
+                                            <t t-esc="wc.name"/>
+                                            <t t-if="wc.code">
+                                                (<span style="font-weight: bold;"><t t-esc="wc.code"/></span>)
+                                            </t>
+                                        </h4>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <t t-if="productivity">
+                            <div class="col-2 d-flex align-items-center">
+                                <div style="background-color: lightgreen; text-align: center; margin-top: 2em;">
+                                    <t>Elapsed time</t><br/>
+                                    <t t-if="data_start_msec">
+                                        <h4 id="timer" t-att-data-value="data_start_msec"/>
+                                        </t>
+                                    <t t-if="wo">
+                                    <!-- _???_ capire gestione blocco senza wo attivo -->
+                                        <t t-if="not data_start_msec">
+                                            <h5 id="timer" data-value=""><t t-esc="website.secs_to_hrs(wo.duration)"/></h5>
+                                            </t>
                                     </t>
-                                </h4>
-                            </button>
-                        </div>
-                        <div class="col-2 d-flex align-items-center" align="center">
-                            <button name="action"
-                                    class="btn cursor_evi"
-                                    type="submit"
-                                    style="background-color:blue; color:white;"
-                                    value="wc_list"
-                                    >
-                                <span style="font-weight: bold; vertical-align: middle;">Workcenters<br/>list</span>
-                            </button>
-                        </div>
+                                </div>
+                            </div>
+                            <div class="col-2 d-flex align-items-center">
+                                <button name="action"
+                                        type="submit"
+                                        class="btn btn-lg btn-block"
+                                        style="background-color:green; color:white;"
+                                        value="unblock">
+                                    Unlock Workcenter
+                                </button>
+                            </div>
+                        </t>
                     </div>
-                    <div class="row my-3">
-                        <div class="col-8 rounded d-flex align-items-center"
-                             style="background-color:lightgreen; color:black;">
-                            <button class="btn">
-                                <span style="opacity: .7; font-size: .8em;">
-                                    Work order [ID <t t-esc="wo.id"/>]
-                                    </span>
-                                <h4>
-                                    <t t-esc="wo.name"/>
-                                </h4>
-                            </button>
+
+                    <!-- error message -->
+                    <t t-if="error">
+                        <div class="alert alert-danger" role="alert">
+                            <t t-raw="error"/>
                         </div>
-                        <div class="col-2 align-items-center">
-                            <t>Elapsed time</t><br/>
-                            <t t-if="data_start_msec">
-                                <h4 id="timer" t-att-data-value="data_start_msec"/>
+                    </t>
+
+                    <!-- locked status undefined -->
+                    <t t-if="not productivity">
+                        <t><h3>Set Workcenter Loss</h3></t>
+                        <div class="row my-3">
+                            <div class="col-6">
+                                <input name="search_id"
+                                       id="search_id"
+                                       type="text"
+                                       class="form-control form-control-lg"
+                                       autofocus="autofocus"
+                                       autocomplete="off"
+                                       placeholder="Loss ID"
+                                       onkeyup="$('#search_name').val('');"
+                                       />
+                            </div>
+                            <div class="col-6">
+                                <input name="search_name"
+                                       id="search_name"
+                                       type="text"
+                                       class="form-control form-control-lg"
+                                       t-att-value="search_name"
+                                       autocomplete="off"
+                                       placeholder="Loss name"
+                                       onkeyup="$('#search_id').val('');"
+                                       />
+                            </div>
+                        </div>
+                        <div class="row my-3">
+                            <div class="col">
+                                <t t-foreach="loss_ids" t-as="loss">
+                                    <button name="loss_id_set"
+                                            type="submit"
+                                            class="btn btn-danger btn-lg btn-block mb8 button_3d"
+                                            t-attf-value="{{loss.id}}"
+                                            >
+                                        <t t-esc="loss.name"/>
+                                        <span style="opacity: 0.5;">[<t t-esc="loss.id"/>]</span>
+                                    </button>
                                 </t>
-                            <t t-if="not data_start_msec">
-                                <h4 id="timer" data-value=""/>
-                                </t>
+                            </div>
                         </div>
-                        <div class="col-2 d-flex align-items-center justify-content-end">
-                            <button name="action"
-                                    type="submit"
-                                    class="btn cursor_evi"
-                                    style="background-color:red; color:white;"
-                                    value="block">
-                                <span style="font-weight: bold; vertical-align: middle; font-size: 1.5em;">Stop</span>
-                                <span class="fa fa-exclamation-triangle fa-2x" style="vertical-align: middle;"/>
-                            </button>
-                        </div>
-                    </div>
-                    <!-- Sblocca -->
+                    </t>
+                </form>
+
+                <form action="/mes_wc_working/alert/" method="POST">
+                    <input name="csrf_token" type="hidden" t-att-value="request.csrf_token()"/>
+                    <input name="workcenter_id" type="hidden" t-att-value="wc.id"/>
+                    <input name="productivity_id" type="hidden" t-if="productivity" t-att-value="productivity.id"/>
+
+                    <!-- locked status defined -->
                     <t t-if="productivity">
-                        <t>_!!!_ sezione productivity</t>
                         <div class="row my-3">
                             <t t-foreach="employee_ids" t-as="employee">
                                 <div class="bg-primary rounded col d-flex align-items-center mx-1">
@@ -96,87 +163,24 @@
                             </div>
                         </div>
                         <div class="row my-3">
-                            <div class="col-1 d-flex align-items-center">
+                            <div class="col-12 d-flex align-items-center">
                                 <div name="action"
                                      class="btn"
                                      style="background-color:red;color:white;"
                                      value="alert_wo">
                                     <span class="fa fa-exclamation-triangle fa-2x"/>
+                                    <span style="font-size: 1.5em;">
+                                        <t>Stopped for</t>:
+                                    </span>
+                                    <span style="font-size: 2em;">
+                                        <t t-esc="productivity.loss_id.name"/>
+                                    </span>
                                 </div>
-                            </div>
-                            <div class="col-8 d-flex align-items-center">
-                                <h4>
-                                    <t t-esc="productivity.loss_id.name"/>
-                                </h4>
-                            </div>
-                            <div class="col-3 rounded d-flex align-items-center" style="background-color:red">
-                                <h4>Alert</h4>
-                            </div>
-                        </div>
-                        <div class="row my-3">
-                            <div class="col">
-                                <button name="action"
-                                        type="submit"
-                                        class="btn btn-lg btn-block btn-danger"
-                                        value="unblock">
-                                    Unblock
-                                </button>
                             </div>
                         </div>
                     </t>
-                    <!-- Blocca -->
-                    <t t-if=" productivity">
-                        <t>_!!!_ sezione NON productivity</t>
-                        <t t-if="error">
-                            <div class="alert alert-danger" role="alert">
-                                <t t-raw="error"/>
-                            </div>
-                        </t>
-                        <div class="row my-3 justify-content-between">
-                            <div class="col-1 d-flex align-items-center">
-                                <div name="action"
-                                     class="btn"
-                                     style="background-color:red;color:white;"
-                                     value="alert_wo">
-                                    <span class="fa fa-exclamation-triangle fa-2x"/>
-                                </div>
-                            </div>
-                            <div class="col-8 d-flex align-items-center">
-                                <h4>Open
-                                    <t t-esc="workcenter.count_open_wo"/>
-                                </h4>
-                            </div>
-                            <div class="col-3 rounded d-flex align-items-center" style="background-color:red">
-                                <h4>Alert</h4>
-                            </div>
-                        </div>
-                        <div class="row my-3">
-                            <div class="col">
-                                <input name="alert_id"
-                                       type="text"
-                                       class="form-control form-control-lg"
-                                       autofocus="autofocus"
-                                       autocomplete="off"
-                                       placeholder="Alert id"/>
-                            </div>
-                        </div>
-                        <t>_!!!_ sezione pulsanti alert</t>
-                        <div class="row my-3">
-                            <div class="col">
-                                <t t-foreach="alerts" t-as="alert">
-                                    <button name="loss_id"
-                                            type="submit"
-                                            class="btn btn-danger btn-lg btn-block mb8"
-                                            t-attf-value="{{alert.id}}"
-                                            >
-                                        <t t-esc="alert.id"/>
-                                        -
-                                        <t t-esc="alert.name"/>
-                                    </button>
-                                </t>
-                            </div>
-                        </div>
-                    </t>
+
+
                 </form>
             </div>
         </t>

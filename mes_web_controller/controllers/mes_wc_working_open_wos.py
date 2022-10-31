@@ -162,7 +162,7 @@ class Main(http.Controller):
                     # if production is stoped (loss_id.manual=true) show wo loss info
                     values = {
                         "productivity": productivity,
-                        "workcenter": wc,
+                        "wc": wc,
                         "wo": productivity.workorder_id,
                         "state": productivity.loss_id.loss_state,
                         "data_start_msec": date_start_ms,
